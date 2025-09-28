@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { AppConfigService } from './config/config.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,7 +11,9 @@ async function bootstrap() {
   // Global prefix for all routes
   app.setGlobalPrefix('api');
 
-  const port = process.env.PORT || 3000;
+  const configService = app.get(AppConfigService);
+  const port = configService.port;
+
   await app.listen(port);
 
   console.log(`Application is running on: http://localhost:${port}/api`);
