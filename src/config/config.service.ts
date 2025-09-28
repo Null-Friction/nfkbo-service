@@ -22,6 +22,14 @@ export class AppConfigService {
     return this.configService.get('kbo.useRealProvider', { infer: true });
   }
 
+  get kboApiBaseUrl(): string {
+    return this.configService.get('kbo.baseUrl', { infer: true });
+  }
+
+  get kboApiTimeout(): number {
+    return this.configService.get('kbo.timeout', { infer: true });
+  }
+
   get isDevelopment(): boolean {
     return this.nodeEnv === 'development';
   }

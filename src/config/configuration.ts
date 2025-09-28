@@ -6,6 +6,8 @@ export const configSchema = z.object({
   kbo: z.object({
     apiKey: z.string().optional(),
     useRealProvider: z.coerce.boolean().default(true),
+    baseUrl: z.string().default('https://api.kbodata.app/v1'),
+    timeout: z.coerce.number().default(10000),
   }),
 });
 
@@ -18,6 +20,8 @@ export function validateConfig(): AppConfig {
     kbo: {
       apiKey: process.env.KBO_API_KEY,
       useRealProvider: process.env.USE_REAL_KBO_PROVIDER !== 'false',
+      baseUrl: process.env.KBO_API_BASE_URL,
+      timeout: process.env.KBO_API_TIMEOUT,
     },
   };
 
