@@ -15,21 +15,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.KboController = void 0;
 const common_1 = require("@nestjs/common");
 const kbo_service_1 = require("./kbo.service");
+const dto_1 = require("./dto");
 let KboController = class KboController {
     constructor(kboService) {
         this.kboService = kboService;
     }
-    async searchByNumber(number) {
-        return this.kboService.searchByNumber(number);
+    async searchByNumber(params) {
+        return this.kboService.searchByNumber(params.number);
     }
-    async searchByName(name) {
-        return this.kboService.searchByName(name);
+    async searchByName(query) {
+        return this.kboService.searchByName(query.name);
     }
-    async getEnterprise(enterpriseNumber) {
-        return this.kboService.getEnterprise(enterpriseNumber);
+    async getEnterprise(params) {
+        return this.kboService.getEnterprise(params.enterpriseNumber);
     }
-    async getEstablishment(establishmentNumber) {
-        return this.kboService.getEstablishment(establishmentNumber);
+    async getEstablishment(params) {
+        return this.kboService.getEstablishment(params.establishmentNumber);
     }
     async searchEnterprises(params) {
         return this.kboService.searchEnterprises(params);
@@ -41,44 +42,44 @@ let KboController = class KboController {
 exports.KboController = KboController;
 __decorate([
     (0, common_1.Get)('companies/search/number/:number'),
-    __param(0, (0, common_1.Param)('number')),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [dto_1.SearchByNumberDto]),
     __metadata("design:returntype", Promise)
 ], KboController.prototype, "searchByNumber", null);
 __decorate([
     (0, common_1.Get)('companies/search/name'),
-    __param(0, (0, common_1.Query)('name')),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [dto_1.SearchByNameDto]),
     __metadata("design:returntype", Promise)
 ], KboController.prototype, "searchByName", null);
 __decorate([
     (0, common_1.Get)('enterprises/:enterpriseNumber'),
-    __param(0, (0, common_1.Param)('enterpriseNumber')),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [dto_1.GetEnterpriseDto]),
     __metadata("design:returntype", Promise)
 ], KboController.prototype, "getEnterprise", null);
 __decorate([
     (0, common_1.Get)('establishments/:establishmentNumber'),
-    __param(0, (0, common_1.Param)('establishmentNumber')),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [dto_1.SearchByEstablishmentNumberDto]),
     __metadata("design:returntype", Promise)
 ], KboController.prototype, "getEstablishment", null);
 __decorate([
     (0, common_1.Get)('enterprises'),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [dto_1.EnterpriseSearchDto]),
     __metadata("design:returntype", Promise)
 ], KboController.prototype, "searchEnterprises", null);
 __decorate([
     (0, common_1.Get)('establishments'),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [dto_1.EstablishmentSearchDto]),
     __metadata("design:returntype", Promise)
 ], KboController.prototype, "searchEstablishments", null);
 exports.KboController = KboController = __decorate([

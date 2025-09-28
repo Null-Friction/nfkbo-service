@@ -1,0 +1,1 @@
+- Never push to main under any circumstance without permission or approval. Always ask before commiting and pushing to main. Always create a feature branch when working on a project.
