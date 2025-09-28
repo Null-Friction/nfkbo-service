@@ -1,7 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { AppConfigService } from '../config/config.service';
-import { KBODataProvider } from '../providers/kbo-data-provider';
-import { MockKBOProvider } from '../providers/mock-kbo-provider';
+import { Injectable, Inject } from '@nestjs/common';
 import {
   KBOCompany,
   EnterpriseComplete,
@@ -13,20 +10,13 @@ import {
   EstablishmentSearchParams,
   KBOProvider,
 } from '../types';
+import { KBO_PROVIDER_TOKEN } from './tokens';
 
 @Injectable()
 export class KboService {
-  private provider: KBOProvider;
-
-  constructor(private readonly configService: AppConfigService) {
-    if (this.configService.useRealKboProvider) {
-      this.provider = new KBODataProvider({
-        apiKey: this.configService.kboApiKey,
-      });
-    } else {
-      this.provider = new MockKBOProvider({});
-    }
-  }
+  constructor(
+    @Inject(KBO_PROVIDER_TOKEN) private readonly provider: KBOProvider
+  ) {}
 
   async searchByNumber(number: string): Promise<KBOCompany | null> {
     return this.provider.searchByNumber(number);
