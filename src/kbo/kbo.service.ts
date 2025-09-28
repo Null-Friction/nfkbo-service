@@ -9,7 +9,7 @@ import {
   EnterpriseSearchParams,
   EstablishmentSearchParams,
   KBOProvider,
-} from '../types';
+} from '../common/types';
 import { KBO_PROVIDER_TOKEN } from './tokens';
 
 @Injectable()

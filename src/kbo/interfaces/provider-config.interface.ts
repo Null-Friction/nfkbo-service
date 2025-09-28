@@ -1,4 +1,4 @@
-import { KBOProviderType } from '../../providers/factory';
+import { KBOProviderType } from '../../common/providers/factory';
 
 /**
  * Configuration interface for KBO provider dependency injection

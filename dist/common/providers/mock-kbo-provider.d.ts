@@ -1,7 +1,9 @@
-import { KBOCompany, EnterpriseComplete, EstablishmentComplete, KBOApiResponse, Enterprise, Establishment, EnterpriseSearchParams, EstablishmentSearchParams, KBOProvider } from '../common/types';
-export declare class KboService {
-    private readonly provider;
-    constructor(provider: KBOProvider);
+import { KBOCompany, EnterpriseComplete, EstablishmentComplete, KBOApiResponse, Enterprise, Establishment, EnterpriseSearchParams, EstablishmentSearchParams, KBOProviderConfig } from '../types/kbo';
+import { BaseKBOProvider } from './base-kbo-provider';
+export declare class MockKBOProvider extends BaseKBOProvider {
+    private mockData;
+    constructor(config?: KBOProviderConfig);
+    private generateMockData;
     searchByNumber(number: string): Promise<KBOCompany | null>;
     searchByName(name: string): Promise<KBOCompany[]>;
     getEnterprise(enterpriseNumber: string): Promise<EnterpriseComplete | null>;
