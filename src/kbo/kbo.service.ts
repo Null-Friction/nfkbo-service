@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { AppConfigService } from '../config/config.service';
 import { KBODataProvider } from '../providers/kbo-data-provider';
 import { MockKBOProvider } from '../providers/mock-kbo-provider';
 import {
@@ -17,14 +18,10 @@ import {
 export class KboService {
   private provider: KBOProvider;
 
-  constructor() {
-    // Initialize with the real KBO provider
-    // You can make this configurable via environment variables
-    const useRealProvider = process.env.USE_REAL_KBO_PROVIDER !== 'false';
-
-    if (useRealProvider) {
+  constructor(private readonly configService: AppConfigService) {
+    if (this.configService.useRealKboProvider) {
       this.provider = new KBODataProvider({
-        apiKey: process.env.KBO_API_KEY,
+        apiKey: this.configService.kboApiKey,
       });
     } else {
       this.provider = new MockKBOProvider({});
