@@ -1,9 +1,9 @@
 import { Logger } from '@nestjs/common';
 import { AppConfigService } from '../../config/config.service';
-import { KBOProvider } from '../../types/kbo';
-import { KBOProviderFactory, KBOProviderType } from '../../providers/factory';
+import { KBOProvider } from '../../common/types/kbo';
+import { KBOProviderFactory, KBOProviderType } from '../../common/providers/factory';
 import { KBOProviderDIConfig } from '../interfaces/provider-config.interface';
-import { validateProviderConfig } from '../../providers/config-validator';
+import { validateProviderConfig } from '../../common/providers/config-validator';
 
 /**
  * Factory function for creating KBO providers with dependency injection

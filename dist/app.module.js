@@ -11,6 +11,8 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const kbo_module_1 = require("./kbo/kbo.module");
 const config_module_1 = require("./config/config.module");
+const shared_module_1 = require("./shared/shared.module");
+const health_module_1 = require("./health/health.module");
 const configuration_1 = require("./config/configuration");
 let AppModule = class AppModule {
 };
@@ -29,6 +31,8 @@ exports.AppModule = AppModule = __decorate([
                 ],
             }),
             config_module_1.AppConfigModule,
+            shared_module_1.SharedModule,
+            health_module_1.HealthModule,
             kbo_module_1.KboModule,
         ],
     })

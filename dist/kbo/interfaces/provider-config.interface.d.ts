@@ -1,4 +1,4 @@
-import { KBOProviderType } from '../../providers/factory';
+import { KBOProviderType } from '../../common/providers/factory';
 export interface KBOProviderDIConfig {
     type: KBOProviderType;
     apiKey?: string;

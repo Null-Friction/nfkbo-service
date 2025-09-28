@@ -9,7 +9,7 @@ import {
   Establishment,
   EnterpriseSearchParams,
   EstablishmentSearchParams,
-} from '../types';
+} from '../common/types';
 
 @Controller('kbo')
 export class KboController {

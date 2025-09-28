@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { KboService } from './kbo.service';
 import { KBO_PROVIDER_TOKEN } from './tokens';
-import { KBOProvider } from '../types/kbo';
+import { KBOProvider } from '../common/types/kbo';
 
 describe('KboService', () => {
   let service: KboService;

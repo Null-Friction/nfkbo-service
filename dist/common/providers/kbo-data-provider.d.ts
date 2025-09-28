@@ -1,7 +1,7 @@
-import { KBOCompany, EnterpriseComplete, EstablishmentComplete, KBOApiResponse, Enterprise, Establishment, EnterpriseSearchParams, EstablishmentSearchParams, KBOProvider } from '../common/types';
-export declare class KboService {
-    private readonly provider;
-    constructor(provider: KBOProvider);
+import { BaseKBOProvider } from './base-kbo-provider';
+import { KBOCompany, EnterpriseComplete, EstablishmentComplete, KBOApiResponse, Enterprise, Establishment, EnterpriseSearchParams, EstablishmentSearchParams, KBOProviderConfig } from '../types/kbo';
+export declare class KBODataProvider extends BaseKBOProvider {
+    constructor(config: KBOProviderConfig);
     searchByNumber(number: string): Promise<KBOCompany | null>;
     searchByName(name: string): Promise<KBOCompany[]>;
     getEnterprise(enterpriseNumber: string): Promise<EnterpriseComplete | null>;
