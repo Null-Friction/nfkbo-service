@@ -4,6 +4,7 @@ import { KboModule } from './kbo/kbo.module';
 import { AppConfigModule } from './config/config.module';
 import { SharedModule } from './shared/shared.module';
 import { HealthModule } from './health/health.module';
+import { AuthModule } from './auth/auth.module';
 import { validateConfig } from './config/configuration';
 
 @Module({
@@ -20,6 +21,7 @@ import { validateConfig } from './config/configuration';
     }),
     AppConfigModule,
     SharedModule,
+    AuthModule,
     HealthModule,
     KboModule,
   ],
