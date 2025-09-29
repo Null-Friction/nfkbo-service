@@ -4,6 +4,8 @@ const core_1 = require("@nestjs/core");
 const common_1 = require("@nestjs/common");
 const app_module_1 = require("./app.module");
 const config_service_1 = require("./config/config.service");
+const filters_1 = require("./common/filters");
+const interceptors_1 = require("./common/interceptors");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors();
@@ -21,6 +23,8 @@ async function bootstrap() {
             value: false,
         },
     }));
+    app.useGlobalInterceptors(new interceptors_1.CorrelationIdInterceptor(), new interceptors_1.PerformanceInterceptor(), new interceptors_1.LoggingInterceptor(), new interceptors_1.ResponseTransformInterceptor());
+    app.useGlobalFilters(new filters_1.KboExceptionFilter(), new filters_1.AllExceptionsFilter());
     const configService = app.get(config_service_1.AppConfigService);
     const port = configService.port;
     await app.listen(port);
