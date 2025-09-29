@@ -8,14 +8,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HealthModule = void 0;
 const common_1 = require("@nestjs/common");
+const terminus_1 = require("@nestjs/terminus");
+const axios_1 = require("@nestjs/axios");
+const config_1 = require("@nestjs/config");
+const health_controller_1 = require("./health.controller");
+const kbo_provider_health_1 = require("./indicators/kbo-provider.health");
+const memory_health_1 = require("./indicators/memory.health");
 let HealthModule = class HealthModule {
 };
 exports.HealthModule = HealthModule;
 exports.HealthModule = HealthModule = __decorate([
     (0, common_1.Module)({
-        providers: [],
-        controllers: [],
-        exports: [],
+        imports: [
+            terminus_1.TerminusModule.forRoot({
+                errorLogStyle: 'pretty',
+                gracefulShutdownTimeoutMs: 1000,
+            }),
+            axios_1.HttpModule,
+            config_1.ConfigModule,
+        ],
+        controllers: [health_controller_1.HealthController],
+        providers: [kbo_provider_health_1.KboProviderHealthIndicator, memory_health_1.MemoryHealthIndicator],
+        exports: [kbo_provider_health_1.KboProviderHealthIndicator, memory_health_1.MemoryHealthIndicator],
     })
 ], HealthModule);
 //# sourceMappingURL=health.module.js.map
