@@ -3,6 +3,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { AppConfigService } from './config/config.service';
 import { AllExceptionsFilter, KboExceptionFilter } from './common/filters';
+import {
+  CorrelationIdInterceptor,
+  LoggingInterceptor,
+  PerformanceInterceptor,
+  ResponseTransformInterceptor,
+} from './common/interceptors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,6 +34,14 @@ async function bootstrap() {
         value: false, // Don't include the validated value in error response
       },
     }),
+  );
+
+  // Global interceptors (order matters - early interceptors run first)
+  app.useGlobalInterceptors(
+    new CorrelationIdInterceptor(),      // Must be first to generate correlation IDs
+    new PerformanceInterceptor(),        // Track performance metrics
+    new LoggingInterceptor(),            // Log requests/responses with correlation IDs
+    new ResponseTransformInterceptor(),  // Transform responses to standard format
   );
 
   // Global exception filters (order matters - specific filters first, then general)
