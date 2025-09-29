@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { AppConfigService } from './config/config.service';
+import { AllExceptionsFilter, KboExceptionFilter } from './common/filters';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -27,6 +28,12 @@ async function bootstrap() {
         value: false, // Don't include the validated value in error response
       },
     }),
+  );
+
+  // Global exception filters (order matters - specific filters first, then general)
+  app.useGlobalFilters(
+    new KboExceptionFilter(),
+    new AllExceptionsFilter(),
   );
 
   const configService = app.get(AppConfigService);
