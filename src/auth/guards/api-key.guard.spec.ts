@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 import { ApiKeyGuard } from './api-key.guard';
 import { ApiKeyService } from '../services/api-key.service';
 import { ApiKeyRole } from '../entities/api-key.entity';
@@ -16,6 +17,10 @@ describe('ApiKeyGuard', () => {
 
   const mockReflector = {
     getAllAndOverride: jest.fn(),
+  };
+
+  const mockConfigService = {
+    get: jest.fn(),
   };
 
   const createMockExecutionContext = (headers: any = {}): ExecutionContext => {
@@ -41,6 +46,10 @@ describe('ApiKeyGuard', () => {
         {
           provide: Reflector,
           useValue: mockReflector,
+        },
+        {
+          provide: ConfigService,
+          useValue: mockConfigService,
         },
       ],
     }).compile();

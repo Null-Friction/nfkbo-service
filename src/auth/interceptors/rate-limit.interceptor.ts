@@ -5,9 +5,10 @@ import {
   CallHandler,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
-import { ApiKeyService } from '../services/api-key.service';
 
 interface RateLimitStore {
   count: number;
@@ -16,10 +17,22 @@ interface RateLimitStore {
 
 @Injectable()
 export class RateLimitInterceptor implements NestInterceptor {
+  private readonly logger = new Logger(RateLimitInterceptor.name);
   private rateLimitStore: Map<string, RateLimitStore> = new Map();
-  private readonly windowMs: number = 60000; // 1 minute window
+  private readonly windowMs: number;
+  private cleanupInterval: NodeJS.Timeout;
 
-  constructor(private readonly apiKeyService: ApiKeyService) {}
+  constructor(private readonly configService: ConfigService) {
+    this.windowMs = this.configService.get<number>(
+      'auth.rateLimitWindowMs',
+      60000,
+    );
+
+    // Cleanup stale entries every 5 minutes to prevent memory exhaustion
+    this.cleanupInterval = setInterval(() => {
+      this.cleanupStaleEntries();
+    }, 5 * 60 * 1000);
+  }
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
@@ -47,6 +60,18 @@ export class RateLimitInterceptor implements NestInterceptor {
       this.rateLimitStore.set(keyId, record);
     }
 
+    // Check if rate limit exceeded BEFORE incrementing (prevents race condition)
+    if (record.count >= limit) {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.TOO_MANY_REQUESTS,
+          message: 'Rate limit exceeded',
+          retryAfter: new Date(record.resetTime).toISOString(),
+        },
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+
     // Increment request count
     record.count++;
 
@@ -61,18 +86,32 @@ export class RateLimitInterceptor implements NestInterceptor {
       new Date(record.resetTime).toISOString(),
     );
 
-    // Check if rate limit exceeded
-    if (record.count > limit) {
-      throw new HttpException(
-        {
-          statusCode: HttpStatus.TOO_MANY_REQUESTS,
-          message: 'Rate limit exceeded',
-          retryAfter: new Date(record.resetTime).toISOString(),
-        },
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
+    return next.handle();
+  }
+
+  private cleanupStaleEntries(): void {
+    const now = Date.now();
+    let cleanedCount = 0;
+
+    for (const [keyId, record] of this.rateLimitStore.entries()) {
+      // Remove entries that are expired + 1 hour (keep some buffer)
+      if (now > record.resetTime + 3600000) {
+        this.rateLimitStore.delete(keyId);
+        cleanedCount++;
+      }
     }
 
-    return next.handle();
+    if (cleanedCount > 0) {
+      this.logger.log(
+        `Cleaned up ${cleanedCount} stale rate limit entries. Current size: ${this.rateLimitStore.size}`,
+      );
+    }
+  }
+
+  // Cleanup on module destroy
+  onModuleDestroy() {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
   }
 }

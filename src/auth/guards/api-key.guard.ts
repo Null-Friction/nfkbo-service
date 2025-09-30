@@ -34,7 +34,13 @@ export class ApiKeyGuard implements CanActivate {
       throw new UnauthorizedException('API key is missing');
     }
 
-    const validatedKey = await this.apiKeyService.validateApiKey(apiKey);
+    // Extract IP address for audit trail
+    const ipAddress = this.extractIpAddress(request);
+
+    const validatedKey = await this.apiKeyService.validateApiKey(
+      apiKey,
+      ipAddress,
+    );
 
     if (!validatedKey) {
       throw new UnauthorizedException('Invalid API key');
@@ -64,5 +70,20 @@ export class ApiKeyGuard implements CanActivate {
   private extractApiKeyFromHeader(request: any): string | undefined {
     const authHeader = request.headers['x-api-key'];
     return authHeader || undefined;
+  }
+
+  private extractIpAddress(request: any): string | undefined {
+    // Check for proxied requests (X-Forwarded-For, X-Real-IP)
+    const forwarded = request.headers['x-forwarded-for'];
+    if (forwarded) {
+      return forwarded.split(',')[0].trim();
+    }
+
+    const realIp = request.headers['x-real-ip'];
+    if (realIp) {
+      return realIp;
+    }
+
+    return request.ip || request.connection?.remoteAddress;
   }
 }

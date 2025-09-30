@@ -15,6 +15,7 @@ const common_1 = require("@nestjs/common");
 const terminus_1 = require("@nestjs/terminus");
 const kbo_provider_health_1 = require("./indicators/kbo-provider.health");
 const memory_health_1 = require("./indicators/memory.health");
+const public_decorator_1 = require("../auth/decorators/public.decorator");
 let HealthController = HealthController_1 = class HealthController {
     constructor(health, http, kboProvider, memory) {
         this.health = health;
@@ -69,6 +70,7 @@ __decorate([
 ], HealthController.prototype, "checkReadiness", null);
 exports.HealthController = HealthController = HealthController_1 = __decorate([
     (0, common_1.Controller)('health'),
+    (0, public_decorator_1.Public)(),
     __metadata("design:paramtypes", [terminus_1.HealthCheckService,
         terminus_1.HttpHealthIndicator,
         kbo_provider_health_1.KboProviderHealthIndicator,
