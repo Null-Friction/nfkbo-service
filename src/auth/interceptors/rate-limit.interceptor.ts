@@ -20,7 +20,7 @@ export class RateLimitInterceptor implements NestInterceptor {
   private readonly logger = new Logger(RateLimitInterceptor.name);
   private rateLimitStore: Map<string, RateLimitStore> = new Map();
   private readonly windowMs: number;
-  private cleanupInterval: NodeJS.Timeout;
+  private cleanupInterval: ReturnType<typeof setInterval>;
 
   constructor(private readonly configService: ConfigService) {
     this.windowMs = this.configService.get<number>(

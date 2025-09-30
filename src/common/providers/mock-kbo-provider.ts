@@ -303,7 +303,7 @@ export class MockKBOProvider extends BaseKBOProvider {
     return Promise.all(
       matchingEnterprises.map(async (enterprise) => {
         const company = await this.searchByNumber(enterprise.enterpriseNumber);
-        return company!;
+        return company;
       })
     );
   }
@@ -341,20 +341,20 @@ export class MockKBOProvider extends BaseKBOProvider {
     // Apply filters
     if (params.enterpriseNumber) {
       filteredEnterprises = filteredEnterprises.filter(e =>
-        e.enterpriseNumber.includes(params.enterpriseNumber!)
+        e.enterpriseNumber.includes(params.enterpriseNumber)
       );
     }
 
     if (params.vatNumber) {
       filteredEnterprises = filteredEnterprises.filter(e =>
-        e.vatNumber?.includes(params.vatNumber!)
+        e.vatNumber?.includes(params.vatNumber)
       );
     }
 
     if (params.denomination) {
       filteredEnterprises = filteredEnterprises.filter(e =>
         e.denominations.some(d =>
-          d.value.toLowerCase().includes(params.denomination!.toLowerCase())
+          d.value.toLowerCase().includes(params.denomination.toLowerCase())
         )
       );
     }
@@ -396,20 +396,20 @@ export class MockKBOProvider extends BaseKBOProvider {
     // Apply filters
     if (params.enterpriseNumber) {
       filteredEstablishments = filteredEstablishments.filter(e =>
-        e.enterpriseNumber.includes(params.enterpriseNumber!)
+        e.enterpriseNumber.includes(params.enterpriseNumber)
       );
     }
 
     if (params.establishmentNumber) {
       filteredEstablishments = filteredEstablishments.filter(e =>
-        e.establishmentNumber.includes(params.establishmentNumber!)
+        e.establishmentNumber.includes(params.establishmentNumber)
       );
     }
 
     if (params.denomination) {
       filteredEstablishments = filteredEstablishments.filter(e =>
         e.denominations.some(d =>
-          d.value.toLowerCase().includes(params.denomination!.toLowerCase())
+          d.value.toLowerCase().includes(params.denomination.toLowerCase())
         )
       );
     }

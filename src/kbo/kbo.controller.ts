@@ -1,5 +1,4 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { KboService } from './kbo.service';
 import {
   KBOCompany,
   EnterpriseComplete,
@@ -16,6 +15,7 @@ import {
   EnterpriseSearchDto,
   EstablishmentSearchDto,
 } from './dto';
+import { KboService } from './kbo.service';
 
 @Controller('kbo')
 export class KboController {

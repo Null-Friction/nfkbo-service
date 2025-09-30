@@ -1,3 +1,4 @@
+import { Transform, Type } from 'class-transformer';
 import {
   IsString,
   IsOptional,
@@ -9,7 +10,6 @@ import {
   MinLength,
   MaxLength
 } from 'class-validator';
-import { Transform, Type } from 'class-transformer';
 
 export class EnterpriseSearchDto {
   @IsOptional()
