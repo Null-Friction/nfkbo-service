@@ -7,15 +7,15 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { ApiKeyService } from './services/api-key.service';
-import { CreateApiKeyDto } from './dto/create-api-key.dto';
+import { Roles } from './decorators/roles.decorator';
 import {
   ApiKeyResponseDto,
   CreatedApiKeyResponseDto,
 } from './dto/api-key-response.dto';
-import { ApiKeyGuard } from './guards/api-key.guard';
-import { Roles } from './decorators/roles.decorator';
+import { CreateApiKeyDto } from './dto/create-api-key.dto';
 import { ApiKeyRole } from './entities/api-key.entity';
+import { ApiKeyGuard } from './guards/api-key.guard';
+import { ApiKeyService } from './services/api-key.service';
 
 @Controller('auth/api-keys')
 @UseGuards(ApiKeyGuard)

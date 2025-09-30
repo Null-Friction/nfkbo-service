@@ -15,7 +15,7 @@ export class KBOProviderFactory {
     const cacheKey = `${config.type}_${config.baseUrl || 'default'}`;
 
     if (this.providers.has(cacheKey)) {
-      return this.providers.get(cacheKey)!;
+      return this.providers.get(cacheKey);
     }
 
     let provider: KBOProvider;

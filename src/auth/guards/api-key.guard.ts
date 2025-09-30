@@ -5,10 +5,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ApiKeyService } from '../services/api-key.service';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import { ApiKeyRole } from '../entities/api-key.entity';
+import { ApiKeyService } from '../services/api-key.service';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {

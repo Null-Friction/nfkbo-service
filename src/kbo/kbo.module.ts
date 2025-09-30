@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { KboController } from './kbo.controller';
-import { KboService } from './kbo.service';
 import { AppConfigModule } from '../config/config.module';
 import { AppConfigService } from '../config/config.service';
-import { KBO_PROVIDER_TOKEN } from './tokens';
+import { KboController } from './kbo.controller';
+import { KboService } from './kbo.service';
 import { createKBOProvider } from './providers/kbo-provider.factory';
+import { KBO_PROVIDER_TOKEN } from './tokens';
 
 @Module({
   imports: [AppConfigModule],

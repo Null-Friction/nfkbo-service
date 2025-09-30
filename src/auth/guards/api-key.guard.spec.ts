@@ -1,15 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import { ApiKeyGuard } from './api-key.guard';
-import { ApiKeyService } from '../services/api-key.service';
+import { Reflector } from '@nestjs/core';
+import { Test, TestingModule } from '@nestjs/testing';
 import { ApiKeyRole } from '../entities/api-key.entity';
+import { ApiKeyService } from '../services/api-key.service';
+import { ApiKeyGuard } from './api-key.guard';
 
 describe('ApiKeyGuard', () => {
   let guard: ApiKeyGuard;
-  let apiKeyService: ApiKeyService;
-  let reflector: Reflector;
 
   const mockApiKeyService = {
     validateApiKey: jest.fn(),
@@ -55,8 +53,6 @@ describe('ApiKeyGuard', () => {
     }).compile();
 
     guard = module.get<ApiKeyGuard>(ApiKeyGuard);
-    apiKeyService = module.get<ApiKeyService>(ApiKeyService);
-    reflector = module.get<Reflector>(Reflector);
 
     jest.clearAllMocks();
   });

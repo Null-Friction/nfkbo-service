@@ -1,15 +1,14 @@
+import { NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
-import { NotFoundException } from '@nestjs/common';
-import { ApiKeyService } from './api-key.service';
 import { ApiKeyEntity } from '../entities/api-key-db.entity';
 import { ApiKeyRole } from '../entities/api-key.entity';
+import { ApiKeyService } from './api-key.service';
 
 describe('ApiKeyService', () => {
   let service: ApiKeyService;
-  let repository: Repository<ApiKeyEntity>;
 
   const mockRepository = {
     create: jest.fn(),
@@ -44,9 +43,6 @@ describe('ApiKeyService', () => {
     }).compile();
 
     service = module.get<ApiKeyService>(ApiKeyService);
-    repository = module.get<Repository<ApiKeyEntity>>(
-      getRepositoryToken(ApiKeyEntity),
-    );
 
     jest.clearAllMocks();
   });

@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { KboModule } from './kbo/kbo.module';
-import { AppConfigModule } from './config/config.module';
-import { SharedModule } from './shared/shared.module';
-import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
-import { validateConfig } from './config/configuration';
 import { ApiKeyEntity } from './auth/entities/api-key-db.entity';
+import { AppConfigModule } from './config/config.module';
+import { validateConfig } from './config/configuration';
+import { HealthModule } from './health/health.module';
+import { KboModule } from './kbo/kbo.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [

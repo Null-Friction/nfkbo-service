@@ -1,12 +1,12 @@
+import { randomUUID } from 'crypto';
 import {
   Injectable,
   NestInterceptor,
   ExecutionContext,
   CallHandler,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { Request, Response } from 'express';
-import { randomUUID } from 'crypto';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class CorrelationIdInterceptor implements NestInterceptor {

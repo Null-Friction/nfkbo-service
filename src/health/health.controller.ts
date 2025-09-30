@@ -4,9 +4,9 @@ import {
   HealthCheck,
   HttpHealthIndicator,
 } from '@nestjs/terminus';
+import { Public } from '../auth/decorators/public.decorator';
 import { KboProviderHealthIndicator } from './indicators/kbo-provider.health';
 import { MemoryHealthIndicator } from './indicators/memory.health';
-import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('health')
 @Public()

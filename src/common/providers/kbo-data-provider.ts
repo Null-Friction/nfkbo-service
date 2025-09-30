@@ -1,4 +1,3 @@
-import { BaseKBOProvider } from './base-kbo-provider';
 import {
   KBOCompany,
   EnterpriseComplete,
@@ -15,6 +14,7 @@ import {
   DenominationSchema,
   NaceActivitySchema
 } from '../types/kbo';
+import { BaseKBOProvider } from './base-kbo-provider';
 import { handleHttpError, KBOValidationError, KBONotFoundError } from './errors';
 
 export class KBODataProvider extends BaseKBOProvider {
@@ -78,7 +78,7 @@ export class KBODataProvider extends BaseKBOProvider {
       return Promise.all(
         response.data.map(async (enterprise) => {
           const company = await this.searchByNumber(enterprise.enterpriseNumber);
-          return company!;
+          return company;
         })
       );
     } catch (error) {
