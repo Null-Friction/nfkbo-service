@@ -6,8 +6,10 @@ import {
 } from '@nestjs/terminus';
 import { KboProviderHealthIndicator } from './indicators/kbo-provider.health';
 import { MemoryHealthIndicator } from './indicators/memory.health';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('health')
+@Public()
 export class HealthController {
   private readonly logger = new Logger(HealthController.name);
 
