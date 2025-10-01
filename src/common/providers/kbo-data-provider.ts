@@ -12,10 +12,10 @@ import {
   EstablishmentSchema,
   AddressSchema,
   DenominationSchema,
-  NaceActivitySchema
+  NaceActivitySchema,
 } from '../types/kbo';
 import { BaseKBOProvider } from './base-kbo-provider';
-import { handleHttpError, KBOValidationError, KBONotFoundError } from './errors';
+import { handleHttpError, KBOValidationError } from './errors';
 
 export class KBODataProvider extends BaseKBOProvider {
   constructor(config: KBOProviderConfig) {
@@ -40,8 +40,9 @@ export class KBODataProvider extends BaseKBOProvider {
 
       // Convert to legacy format for backward compatibility
       const primaryAddress = enterprise.addresses[0];
-      const primaryDenomination = enterprise.denominations.find(d => d.type === 'social')
-        || enterprise.denominations[0];
+      const primaryDenomination =
+        enterprise.denominations.find((d) => d.type === 'social') ||
+        enterprise.denominations[0];
 
       return {
         number: enterprise.enterpriseNumber,
@@ -53,7 +54,10 @@ export class KBODataProvider extends BaseKBOProvider {
           country: primaryAddress?.countryCode || 'BE',
         },
         status: enterprise.active ? 'active' : 'inactive',
-        legalForm: enterprise.juridicalForm?.description.nl || enterprise.juridicalForm?.description.fr || '',
+        legalForm:
+          enterprise.juridicalForm?.description.nl ||
+          enterprise.juridicalForm?.description.fr ||
+          '',
         establishmentDate: enterprise.dateStart,
       };
     } catch (error) {
@@ -75,12 +79,15 @@ export class KBODataProvider extends BaseKBOProvider {
         limit: 50,
       });
 
-      return Promise.all(
+      const companies = await Promise.all(
         response.data.map(async (enterprise) => {
-          const company = await this.searchByNumber(enterprise.enterpriseNumber);
+          const company = await this.searchByNumber(
+            enterprise.enterpriseNumber
+          );
           return company;
         })
       );
+      return companies.filter((c): c is KBOCompany => c !== null);
     } catch (error) {
       if (error instanceof KBOValidationError) {
         throw error;
@@ -89,7 +96,9 @@ export class KBODataProvider extends BaseKBOProvider {
     }
   }
 
-  async getEnterprise(enterpriseNumber: string): Promise<EnterpriseComplete | null> {
+  async getEnterprise(
+    enterpriseNumber: string
+  ): Promise<EnterpriseComplete | null> {
     try {
       if (!enterpriseNumber?.trim()) {
         throw new KBOValidationError('Enterprise number is required');
@@ -100,13 +109,13 @@ export class KBODataProvider extends BaseKBOProvider {
         denominationsResponse,
         addressesResponse,
         establishmentsResponse,
-        activitiesResponse
+        activitiesResponse,
       ] = await Promise.allSettled([
         this.client.get(`/enterprises/${enterpriseNumber}`),
         this.client.get(`/enterprises/${enterpriseNumber}/denominations`),
         this.client.get(`/enterprises/${enterpriseNumber}/addresses`),
         this.client.get(`/enterprises/${enterpriseNumber}/establishments`),
-        this.client.get(`/enterprises/${enterpriseNumber}/activities`)
+        this.client.get(`/enterprises/${enterpriseNumber}/activities`),
       ]);
 
       if (enterpriseResponse.status === 'rejected') {
@@ -118,21 +127,31 @@ export class KBODataProvider extends BaseKBOProvider {
 
       const enterprise = EnterpriseSchema.parse(enterpriseResponse.value.data);
 
-      const denominations = denominationsResponse.status === 'fulfilled'
-        ? denominationsResponse.value.data.map((d: any) => DenominationSchema.parse(d))
-        : [];
+      const denominations =
+        denominationsResponse.status === 'fulfilled'
+          ? denominationsResponse.value.data.map((d: any) =>
+              DenominationSchema.parse(d)
+            )
+          : [];
 
-      const addresses = addressesResponse.status === 'fulfilled'
-        ? addressesResponse.value.data.map((a: any) => AddressSchema.parse(a))
-        : [];
+      const addresses =
+        addressesResponse.status === 'fulfilled'
+          ? addressesResponse.value.data.map((a: any) => AddressSchema.parse(a))
+          : [];
 
-      const establishments = establishmentsResponse.status === 'fulfilled'
-        ? establishmentsResponse.value.data.map((e: any) => EstablishmentSchema.parse(e))
-        : [];
+      const establishments =
+        establishmentsResponse.status === 'fulfilled'
+          ? establishmentsResponse.value.data.map((e: any) =>
+              EstablishmentSchema.parse(e)
+            )
+          : [];
 
-      const activities = activitiesResponse.status === 'fulfilled'
-        ? activitiesResponse.value.data.map((a: any) => NaceActivitySchema.parse(a))
-        : [];
+      const activities =
+        activitiesResponse.status === 'fulfilled'
+          ? activitiesResponse.value.data.map((a: any) =>
+              NaceActivitySchema.parse(a)
+            )
+          : [];
 
       return {
         ...enterprise,
@@ -149,7 +168,9 @@ export class KBODataProvider extends BaseKBOProvider {
     }
   }
 
-  async getEstablishment(establishmentNumber: string): Promise<EstablishmentComplete | null> {
+  async getEstablishment(
+    establishmentNumber: string
+  ): Promise<EstablishmentComplete | null> {
     try {
       if (!establishmentNumber?.trim()) {
         throw new KBOValidationError('Establishment number is required');
@@ -159,12 +180,12 @@ export class KBODataProvider extends BaseKBOProvider {
         establishmentResponse,
         denominationsResponse,
         addressesResponse,
-        activitiesResponse
+        activitiesResponse,
       ] = await Promise.allSettled([
         this.client.get(`/establishments/${establishmentNumber}`),
         this.client.get(`/establishments/${establishmentNumber}/denominations`),
         this.client.get(`/establishments/${establishmentNumber}/addresses`),
-        this.client.get(`/establishments/${establishmentNumber}/activities`)
+        this.client.get(`/establishments/${establishmentNumber}/activities`),
       ]);
 
       if (establishmentResponse.status === 'rejected') {
@@ -174,19 +195,28 @@ export class KBODataProvider extends BaseKBOProvider {
         handleHttpError(establishmentResponse.reason);
       }
 
-      const establishment = EstablishmentSchema.parse(establishmentResponse.value.data);
+      const establishment = EstablishmentSchema.parse(
+        establishmentResponse.value.data
+      );
 
-      const denominations = denominationsResponse.status === 'fulfilled'
-        ? denominationsResponse.value.data.map((d: any) => DenominationSchema.parse(d))
-        : [];
+      const denominations =
+        denominationsResponse.status === 'fulfilled'
+          ? denominationsResponse.value.data.map((d: any) =>
+              DenominationSchema.parse(d)
+            )
+          : [];
 
-      const addresses = addressesResponse.status === 'fulfilled'
-        ? addressesResponse.value.data.map((a: any) => AddressSchema.parse(a))
-        : [];
+      const addresses =
+        addressesResponse.status === 'fulfilled'
+          ? addressesResponse.value.data.map((a: any) => AddressSchema.parse(a))
+          : [];
 
-      const activities = activitiesResponse.status === 'fulfilled'
-        ? activitiesResponse.value.data.map((a: any) => NaceActivitySchema.parse(a))
-        : [];
+      const activities =
+        activitiesResponse.status === 'fulfilled'
+          ? activitiesResponse.value.data.map((a: any) =>
+              NaceActivitySchema.parse(a)
+            )
+          : [];
 
       return {
         ...establishment,
@@ -202,7 +232,9 @@ export class KBODataProvider extends BaseKBOProvider {
     }
   }
 
-  async searchEnterprises(params: EnterpriseSearchParams): Promise<KBOApiResponse<Enterprise[]>> {
+  async searchEnterprises(
+    params: EnterpriseSearchParams
+  ): Promise<KBOApiResponse<Enterprise[]>> {
     try {
       const queryParams = new URLSearchParams();
 
@@ -212,9 +244,13 @@ export class KBODataProvider extends BaseKBOProvider {
         }
       });
 
-      const response = await this.client.get(`/enterprises?${queryParams.toString()}`);
+      const response = await this.client.get(
+        `/enterprises?${queryParams.toString()}`
+      );
 
-      const enterprises = response.data.data.map((e: any) => EnterpriseSchema.parse(e));
+      const enterprises = response.data.data.map((e: any) =>
+        EnterpriseSchema.parse(e)
+      );
 
       return {
         data: enterprises,
@@ -230,7 +266,9 @@ export class KBODataProvider extends BaseKBOProvider {
     }
   }
 
-  async searchEstablishments(params: EstablishmentSearchParams): Promise<KBOApiResponse<Establishment[]>> {
+  async searchEstablishments(
+    params: EstablishmentSearchParams
+  ): Promise<KBOApiResponse<Establishment[]>> {
     try {
       const queryParams = new URLSearchParams();
 
@@ -240,9 +278,13 @@ export class KBODataProvider extends BaseKBOProvider {
         }
       });
 
-      const response = await this.client.get(`/establishments?${queryParams.toString()}`);
+      const response = await this.client.get(
+        `/establishments?${queryParams.toString()}`
+      );
 
-      const establishments = response.data.data.map((e: any) => EstablishmentSchema.parse(e));
+      const establishments = response.data.data.map((e: any) =>
+        EstablishmentSchema.parse(e)
+      );
 
       return {
         data: establishments,

@@ -1,12 +1,19 @@
-import { IsString, IsEnum, IsOptional, IsNumber, IsDateString, Min } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsOptional,
+  IsNumber,
+  IsDateString,
+  Min,
+} from 'class-validator';
 import { ApiKeyRole } from '../entities/api-key.entity';
 
 export class CreateApiKeyDto {
   @IsString()
-  name: string;
+  name!: string;
 
   @IsEnum(ApiKeyRole)
-  role: ApiKeyRole;
+  role!: ApiKeyRole;
 
   @IsOptional()
   @IsDateString()

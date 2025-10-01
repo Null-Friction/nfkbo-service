@@ -149,7 +149,11 @@ export interface EstablishmentComplete extends Establishment {
 export const KBOLanguageSchema = z.enum(['unknown', 'nl', 'en', 'fr', 'de']);
 export const KBOEntityTypeSchema = z.enum(['enterprise', 'establishment']);
 export const KBOEnterpriseTypeSchema = z.enum(['natural', 'entity']);
-export const KBODenominationTypeSchema = z.enum(['social', 'abbreviation', 'commercial']);
+export const KBODenominationTypeSchema = z.enum([
+  'social',
+  'abbreviation',
+  'commercial',
+]);
 
 export const MultilingualTextSchema = z.object({
   nl: z.string().optional(),
@@ -246,34 +250,19 @@ export interface KBOProvider {
   searchByName(name: string): Promise<KBOCompany[]>;
   // Extended methods for new comprehensive types
   getEnterprise(enterpriseNumber: string): Promise<EnterpriseComplete | null>;
-  getEstablishment(establishmentNumber: string): Promise<EstablishmentComplete | null>;
-  searchEnterprises(params: EnterpriseSearchParams): Promise<KBOApiResponse<Enterprise[]>>;
-  searchEstablishments(params: EstablishmentSearchParams): Promise<KBOApiResponse<Establishment[]>>;
+  getEstablishment(
+    establishmentNumber: string
+  ): Promise<EstablishmentComplete | null>;
+  searchEnterprises(
+    params: EnterpriseSearchParams
+  ): Promise<KBOApiResponse<Enterprise[]>>;
+  searchEstablishments(
+    params: EstablishmentSearchParams
+  ): Promise<KBOApiResponse<Establishment[]>>;
 }
 
 export interface KBOProviderConfig {
   apiKey?: string;
   baseUrl?: string;
   timeout?: number;
-}
-
-// Search parameter interfaces
-export interface EnterpriseSearchParams {
-  enterpriseNumber?: string;
-  vatNumber?: string;
-  denomination?: string;
-  active?: boolean;
-  zipcode?: string;
-  page?: number;
-  limit?: number;
-}
-
-export interface EstablishmentSearchParams {
-  enterpriseNumber?: string;
-  establishmentNumber?: string;
-  denomination?: string;
-  active?: boolean;
-  zipcode?: string;
-  page?: number;
-  limit?: number;
 }

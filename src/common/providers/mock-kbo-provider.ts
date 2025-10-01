@@ -8,12 +8,9 @@ import {
   EnterpriseSearchParams,
   EstablishmentSearchParams,
   KBOProviderConfig,
-  Address,
-  Denomination,
-  NaceActivity
 } from '../types/kbo';
 import { BaseKBOProvider } from './base-kbo-provider';
-import { KBOValidationError, KBONotFoundError } from './errors';
+import { KBOValidationError } from './errors';
 
 export class MockKBOProvider extends BaseKBOProvider {
   private mockData: {
@@ -36,7 +33,7 @@ export class MockKBOProvider extends BaseKBOProvider {
         typeDescription: {
           nl: 'Rechtspersoon',
           fr: 'Personne morale',
-          en: 'Legal entity'
+          en: 'Legal entity',
         },
         dateStart: '2020-01-15',
         juridicalForm: {
@@ -44,17 +41,17 @@ export class MockKBOProvider extends BaseKBOProvider {
           description: {
             nl: 'Besloten vennootschap',
             fr: 'Société privée à responsabilité limitée',
-            en: 'Private limited company'
-          }
+            en: 'Private limited company',
+          },
         },
         juridicalSituation: {
           code: '000',
           description: {
             nl: 'Normale toestand',
             fr: 'Situation normale',
-            en: 'Normal situation'
+            en: 'Normal situation',
           },
-          dateStart: '2020-01-15'
+          dateStart: '2020-01-15',
         },
         denominations: [
           {
@@ -66,10 +63,10 @@ export class MockKBOProvider extends BaseKBOProvider {
             typeDescription: {
               nl: 'Maatschappelijke benaming',
               fr: 'Dénomination sociale',
-              en: 'Corporate name'
+              en: 'Corporate name',
             },
-            dateStart: '2020-01-15'
-          }
+            dateStart: '2020-01-15',
+          },
         ],
         addresses: [
           {
@@ -77,40 +74,40 @@ export class MockKBOProvider extends BaseKBOProvider {
             entityType: 'enterprise',
             street: {
               nl: 'Teststraat 123',
-              fr: 'Rue de Test 123'
+              fr: 'Rue de Test 123',
             },
             addressNumber: '123',
             zipcode: '1000',
             city: {
               nl: 'Brussel',
               fr: 'Bruxelles',
-              en: 'Brussels'
+              en: 'Brussels',
             },
             countryCode: 'BE',
-            dateStart: '2020-01-15'
-          }
+            dateStart: '2020-01-15',
+          },
         ],
         establishments: [
           {
             enterpriseNumber: '0123456789',
             establishmentNumber: '2123456789',
             active: true,
-            dateStart: '2020-01-15'
-          }
+            dateStart: '2020-01-15',
+          },
         ],
         activities: [
           {
             naceVersion: 2008,
             naceCode: '62010',
             description: {
-              nl: 'Ontwikkeling van computerprogramma\'s',
+              nl: "Ontwikkeling van computerprogramma's",
               fr: 'Programmation informatique',
-              en: 'Computer programming activities'
+              en: 'Computer programming activities',
             },
             classification: 'MAIN',
-            dateStart: '2020-01-15'
-          }
-        ]
+            dateStart: '2020-01-15',
+          },
+        ],
       },
       {
         enterpriseNumber: '0987654321',
@@ -120,7 +117,7 @@ export class MockKBOProvider extends BaseKBOProvider {
         typeDescription: {
           nl: 'Rechtspersoon',
           fr: 'Personne morale',
-          en: 'Legal entity'
+          en: 'Legal entity',
         },
         dateStart: '2015-03-20',
         dateEnd: '2023-12-31',
@@ -129,17 +126,17 @@ export class MockKBOProvider extends BaseKBOProvider {
           description: {
             nl: 'Naamloze vennootschap',
             fr: 'Société anonyme',
-            en: 'Public limited company'
-          }
+            en: 'Public limited company',
+          },
         },
         juridicalSituation: {
           code: '002',
           description: {
             nl: 'Vereffening',
             fr: 'Liquidation',
-            en: 'Liquidation'
+            en: 'Liquidation',
           },
-          dateStart: '2023-12-31'
+          dateStart: '2023-12-31',
         },
         denominations: [
           {
@@ -151,10 +148,10 @@ export class MockKBOProvider extends BaseKBOProvider {
             typeDescription: {
               nl: 'Maatschappelijke benaming',
               fr: 'Dénomination sociale',
-              en: 'Corporate name'
+              en: 'Corporate name',
             },
-            dateStart: '2015-03-20'
-          }
+            dateStart: '2015-03-20',
+          },
         ],
         addresses: [
           {
@@ -162,18 +159,18 @@ export class MockKBOProvider extends BaseKBOProvider {
             entityType: 'enterprise',
             street: {
               nl: 'Oude Laan 456',
-              fr: 'Avenue Ancienne 456'
+              fr: 'Avenue Ancienne 456',
             },
             addressNumber: '456',
             zipcode: '2000',
             city: {
               nl: 'Antwerpen',
               fr: 'Anvers',
-              en: 'Antwerp'
+              en: 'Antwerp',
             },
             countryCode: 'BE',
-            dateStart: '2015-03-20'
-          }
+            dateStart: '2015-03-20',
+          },
         ],
         establishments: [],
         activities: [
@@ -183,13 +180,13 @@ export class MockKBOProvider extends BaseKBOProvider {
             description: {
               nl: 'Advisering op het gebied van bedrijfsbeheer',
               fr: 'Conseil pour les affaires et autres conseils de gestion',
-              en: 'Business and other management consultancy activities'
+              en: 'Business and other management consultancy activities',
             },
             classification: 'MAIN',
-            dateStart: '2015-03-20'
-          }
-        ]
-      }
+            dateStart: '2015-03-20',
+          },
+        ],
+      },
     ];
 
     const mockEstablishments: EstablishmentComplete[] = [
@@ -208,10 +205,10 @@ export class MockKBOProvider extends BaseKBOProvider {
             typeDescription: {
               nl: 'Handelsnaam',
               fr: 'Nom commercial',
-              en: 'Trade name'
+              en: 'Trade name',
             },
-            dateStart: '2020-01-15'
-          }
+            dateStart: '2020-01-15',
+          },
         ],
         addresses: [
           {
@@ -219,38 +216,38 @@ export class MockKBOProvider extends BaseKBOProvider {
             entityType: 'establishment',
             street: {
               nl: 'Teststraat 123',
-              fr: 'Rue de Test 123'
+              fr: 'Rue de Test 123',
             },
             addressNumber: '123',
             zipcode: '1000',
             city: {
               nl: 'Brussel',
               fr: 'Bruxelles',
-              en: 'Brussels'
+              en: 'Brussels',
             },
             countryCode: 'BE',
-            dateStart: '2020-01-15'
-          }
+            dateStart: '2020-01-15',
+          },
         ],
         activities: [
           {
             naceVersion: 2008,
             naceCode: '62010',
             description: {
-              nl: 'Ontwikkeling van computerprogramma\'s',
+              nl: "Ontwikkeling van computerprogramma's",
               fr: 'Programmation informatique',
-              en: 'Computer programming activities'
+              en: 'Computer programming activities',
             },
             classification: 'MAIN',
-            dateStart: '2020-01-15'
-          }
-        ]
-      }
+            dateStart: '2020-01-15',
+          },
+        ],
+      },
     ];
 
     return {
       enterprises: mockEnterprises,
-      establishments: mockEstablishments
+      establishments: mockEstablishments,
     };
   }
 
@@ -260,16 +257,19 @@ export class MockKBOProvider extends BaseKBOProvider {
     }
 
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
-    const enterprise = this.mockData.enterprises.find(e => e.enterpriseNumber === number);
+    const enterprise = this.mockData.enterprises.find(
+      (e) => e.enterpriseNumber === number
+    );
     if (!enterprise) {
       return null;
     }
 
     const primaryAddress = enterprise.addresses[0];
-    const primaryDenomination = enterprise.denominations.find(d => d.type === 'social')
-      || enterprise.denominations[0];
+    const primaryDenomination =
+      enterprise.denominations.find((d) => d.type === 'social') ||
+      enterprise.denominations[0];
 
     return {
       number: enterprise.enterpriseNumber,
@@ -281,7 +281,10 @@ export class MockKBOProvider extends BaseKBOProvider {
         country: primaryAddress?.countryCode || 'BE',
       },
       status: enterprise.active ? 'active' : 'inactive',
-      legalForm: enterprise.juridicalForm?.description.nl || enterprise.juridicalForm?.description.fr || '',
+      legalForm:
+        enterprise.juridicalForm?.description.nl ||
+        enterprise.juridicalForm?.description.fr ||
+        '',
       establishmentDate: enterprise.dateStart,
     };
   }
@@ -292,80 +295,93 @@ export class MockKBOProvider extends BaseKBOProvider {
     }
 
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 150));
+    await new Promise((resolve) => setTimeout(resolve, 150));
 
-    const matchingEnterprises = this.mockData.enterprises.filter(enterprise =>
-      enterprise.denominations.some(denomination =>
+    const matchingEnterprises = this.mockData.enterprises.filter((enterprise) =>
+      enterprise.denominations.some((denomination) =>
         denomination.value.toLowerCase().includes(name.toLowerCase())
       )
     );
 
-    return Promise.all(
+    const companies = await Promise.all(
       matchingEnterprises.map(async (enterprise) => {
         const company = await this.searchByNumber(enterprise.enterpriseNumber);
         return company;
       })
     );
+    return companies.filter((c): c is KBOCompany => c !== null);
   }
 
-  async getEnterprise(enterpriseNumber: string): Promise<EnterpriseComplete | null> {
+  async getEnterprise(
+    enterpriseNumber: string
+  ): Promise<EnterpriseComplete | null> {
     if (!enterpriseNumber?.trim()) {
       throw new KBOValidationError('Enterprise number is required');
     }
 
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
-    const enterprise = this.mockData.enterprises.find(e => e.enterpriseNumber === enterpriseNumber);
+    const enterprise = this.mockData.enterprises.find(
+      (e) => e.enterpriseNumber === enterpriseNumber
+    );
     return enterprise || null;
   }
 
-  async getEstablishment(establishmentNumber: string): Promise<EstablishmentComplete | null> {
+  async getEstablishment(
+    establishmentNumber: string
+  ): Promise<EstablishmentComplete | null> {
     if (!establishmentNumber?.trim()) {
       throw new KBOValidationError('Establishment number is required');
     }
 
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
-    const establishment = this.mockData.establishments.find(e => e.establishmentNumber === establishmentNumber);
+    const establishment = this.mockData.establishments.find(
+      (e) => e.establishmentNumber === establishmentNumber
+    );
     return establishment || null;
   }
 
-  async searchEnterprises(params: EnterpriseSearchParams): Promise<KBOApiResponse<Enterprise[]>> {
+  async searchEnterprises(
+    params: EnterpriseSearchParams
+  ): Promise<KBOApiResponse<Enterprise[]>> {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     let filteredEnterprises = [...this.mockData.enterprises];
 
     // Apply filters
     if (params.enterpriseNumber) {
-      filteredEnterprises = filteredEnterprises.filter(e =>
-        e.enterpriseNumber.includes(params.enterpriseNumber)
+      filteredEnterprises = filteredEnterprises.filter((e) =>
+        e.enterpriseNumber.includes(params.enterpriseNumber!)
       );
     }
 
     if (params.vatNumber) {
-      filteredEnterprises = filteredEnterprises.filter(e =>
-        e.vatNumber?.includes(params.vatNumber)
+      filteredEnterprises = filteredEnterprises.filter((e) =>
+        e.vatNumber?.includes(params.vatNumber!)
       );
     }
 
     if (params.denomination) {
-      filteredEnterprises = filteredEnterprises.filter(e =>
-        e.denominations.some(d =>
-          d.value.toLowerCase().includes(params.denomination.toLowerCase())
+      filteredEnterprises = filteredEnterprises.filter((e) =>
+        e.denominations.some((d) =>
+          d.value.toLowerCase().includes(params.denomination!.toLowerCase())
         )
       );
     }
 
     if (params.active !== undefined) {
-      filteredEnterprises = filteredEnterprises.filter(e => e.active === params.active);
+      filteredEnterprises = filteredEnterprises.filter(
+        (e) => e.active === params.active
+      );
     }
 
     if (params.zipcode) {
-      filteredEnterprises = filteredEnterprises.filter(e =>
-        e.addresses.some(a => a.zipcode === params.zipcode)
+      filteredEnterprises = filteredEnterprises.filter((e) =>
+        e.addresses.some((a) => a.zipcode === params.zipcode)
       );
     }
 
@@ -387,40 +403,44 @@ export class MockKBOProvider extends BaseKBOProvider {
     };
   }
 
-  async searchEstablishments(params: EstablishmentSearchParams): Promise<KBOApiResponse<Establishment[]>> {
+  async searchEstablishments(
+    params: EstablishmentSearchParams
+  ): Promise<KBOApiResponse<Establishment[]>> {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     let filteredEstablishments = [...this.mockData.establishments];
 
     // Apply filters
     if (params.enterpriseNumber) {
-      filteredEstablishments = filteredEstablishments.filter(e =>
-        e.enterpriseNumber.includes(params.enterpriseNumber)
+      filteredEstablishments = filteredEstablishments.filter((e) =>
+        e.enterpriseNumber.includes(params.enterpriseNumber!)
       );
     }
 
     if (params.establishmentNumber) {
-      filteredEstablishments = filteredEstablishments.filter(e =>
-        e.establishmentNumber.includes(params.establishmentNumber)
+      filteredEstablishments = filteredEstablishments.filter((e) =>
+        e.establishmentNumber.includes(params.establishmentNumber!)
       );
     }
 
     if (params.denomination) {
-      filteredEstablishments = filteredEstablishments.filter(e =>
-        e.denominations.some(d =>
-          d.value.toLowerCase().includes(params.denomination.toLowerCase())
+      filteredEstablishments = filteredEstablishments.filter((e) =>
+        e.denominations.some((d) =>
+          d.value.toLowerCase().includes(params.denomination!.toLowerCase())
         )
       );
     }
 
     if (params.active !== undefined) {
-      filteredEstablishments = filteredEstablishments.filter(e => e.active === params.active);
+      filteredEstablishments = filteredEstablishments.filter(
+        (e) => e.active === params.active
+      );
     }
 
     if (params.zipcode) {
-      filteredEstablishments = filteredEstablishments.filter(e =>
-        e.addresses.some(a => a.zipcode === params.zipcode)
+      filteredEstablishments = filteredEstablishments.filter((e) =>
+        e.addresses.some((a) => a.zipcode === params.zipcode)
       );
     }
 

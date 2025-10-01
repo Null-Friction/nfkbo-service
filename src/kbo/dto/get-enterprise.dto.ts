@@ -6,5 +6,5 @@ export class GetEnterpriseDto {
   @Matches(/^\d{10}$/, {
     message: 'Enterprise number must be exactly 10 digits',
   })
-  enterpriseNumber: string;
+  enterpriseNumber!: string;
 }
