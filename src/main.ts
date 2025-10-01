@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter, KboExceptionFilter } from './common/filters';
@@ -33,29 +33,29 @@ async function bootstrap() {
         target: false, // Don't include the target object in error response
         value: false, // Don't include the validated value in error response
       },
-    }),
+    })
   );
 
   // Global interceptors (order matters - early interceptors run first)
   app.useGlobalInterceptors(
-    new CorrelationIdInterceptor(),      // Must be first to generate correlation IDs
-    new PerformanceInterceptor(),        // Track performance metrics
-    new LoggingInterceptor(),            // Log requests/responses with correlation IDs
-    new ResponseTransformInterceptor(),  // Transform responses to standard format
+    new CorrelationIdInterceptor(), // Must be first to generate correlation IDs
+    new PerformanceInterceptor(), // Track performance metrics
+    new LoggingInterceptor(), // Log requests/responses with correlation IDs
+    new ResponseTransformInterceptor() // Transform responses to standard format
   );
 
   // Global exception filters (order matters - specific filters first, then general)
-  app.useGlobalFilters(
-    new KboExceptionFilter(),
-    new AllExceptionsFilter(),
-  );
+  app.useGlobalFilters(new KboExceptionFilter(), new AllExceptionsFilter());
 
   const configService = app.get(AppConfigService);
   const port = configService.port;
 
   await app.listen(port);
 
-  console.log(`Application is running on: http://localhost:${port}/api`);
+  Logger.log(
+    `Application is running on: http://localhost:${port}/api`,
+    'Bootstrap'
+  );
 }
 
-bootstrap();
+void bootstrap();

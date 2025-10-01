@@ -46,8 +46,8 @@ export class KboExceptionFilter implements ExceptionFilter {
       code: exception.code,
       timestamp: new Date().toISOString(),
       path: request.url,
-      ...(correlationId && { correlationId }),
-      ...(exception.details && { details: exception.details }),
+      ...(correlationId ? { correlationId } : {}),
+      ...(exception.details ? { details: exception.details } : {}),
     };
 
     // Log KBO-specific errors with appropriate log level
@@ -92,7 +92,7 @@ export class KboExceptionFilter implements ExceptionFilter {
   private logKboError(
     exception: KBOProviderError,
     request: Request,
-    correlationId?: string,
+    correlationId?: string
   ): void {
     const context = {
       exception: {

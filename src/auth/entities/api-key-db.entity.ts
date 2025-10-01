@@ -12,49 +12,49 @@ import { ApiKeyRole } from './api-key.entity';
 @Index(['hashPrefix']) // Index for faster lookup
 export class ApiKeyEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ unique: true, length: 16 })
   @Index() // Index for fast lookup
-  hashPrefix: string; // First 16 chars of hash for O(1) lookup
+  hashPrefix!: string; // First 16 chars of hash for O(1) lookup
 
   @Column({ type: 'text' })
-  hashedKey: string;
+  hashedKey!: string;
 
   @Column({ length: 255 })
-  name: string;
+  name!: string;
 
   @Column({
     type: 'enum',
     enum: ApiKeyRole,
     default: ApiKeyRole.USER,
   })
-  role: ApiKeyRole;
+  role!: ApiKeyRole;
 
   @Column({ default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  lastUsedAt: Date | null;
+  lastUsedAt!: Date | null;
 
   @Column({ type: 'timestamp', nullable: true })
-  expiresAt: Date | null;
+  expiresAt!: Date | null;
 
   @Column({ type: 'int', default: 100 })
-  rateLimit: number;
+  rateLimit!: number;
 
   @Column({ type: 'bigint', default: 0 })
-  requestCount: bigint;
+  requestCount!: bigint;
 
   @Column({ type: 'text', nullable: true })
-  createdBy: string | null; // For audit trail
+  createdBy!: string | null; // For audit trail
 
   @Column({ type: 'text', nullable: true })
-  lastUsedIp: string | null; // For audit trail
+  lastUsedIp!: string | null; // For audit trail
 }

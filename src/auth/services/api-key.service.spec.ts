@@ -2,7 +2,6 @@ import { NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { ApiKeyEntity } from '../entities/api-key-db.entity';
 import { ApiKeyRole } from '../entities/api-key.entity';
 import { ApiKeyService } from './api-key.service';
@@ -152,7 +151,7 @@ describe('ApiKeyService', () => {
       mockRepository.findOne.mockResolvedValue(null);
 
       await expect(service.findOne('non-existent-id')).rejects.toThrow(
-        NotFoundException,
+        NotFoundException
       );
     });
   });
@@ -177,7 +176,7 @@ describe('ApiKeyService', () => {
       mockRepository.findOne.mockResolvedValue(null);
 
       await expect(service.revokeApiKey('non-existent-id')).rejects.toThrow(
-        NotFoundException,
+        NotFoundException
       );
     });
   });
@@ -201,7 +200,7 @@ describe('ApiKeyService', () => {
       mockRepository.findOne.mockResolvedValue(null);
 
       await expect(service.deleteApiKey('non-existent-id')).rejects.toThrow(
-        NotFoundException,
+        NotFoundException
       );
     });
   });
