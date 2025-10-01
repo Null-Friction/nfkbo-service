@@ -4,7 +4,9 @@ import { AppConfig } from './configuration';
 
 @Injectable()
 export class AppConfigService {
-  constructor(private readonly configService: NestConfigService<AppConfig, true>) {}
+  constructor(
+    private readonly configService: NestConfigService<AppConfig, true>
+  ) {}
 
   get port(): number {
     return this.configService.get('port', { infer: true });
@@ -40,5 +42,9 @@ export class AppConfigService {
 
   get isTest(): boolean {
     return this.nodeEnv === 'test';
+  }
+
+  get lookupKeySecret(): string {
+    return this.configService.get('auth.lookupKeySecret', { infer: true });
   }
 }

@@ -7,7 +7,6 @@ import { AppConfigModule } from './config/config.module';
 import { validateConfig } from './config/configuration';
 import { HealthModule } from './health/health.module';
 import { KboModule } from './kbo/kbo.module';
-import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -33,11 +32,19 @@ import { SharedModule } from './shared/shared.module';
         entities: [ApiKeyEntity],
         synchronize: configService.get<boolean>('database.synchronize'),
         logging: configService.get<boolean>('database.logging'),
+        // Connection pool configuration
+        extra: {
+          max: 20, // Maximum pool size
+          min: 2, // Minimum pool size
+          idleTimeoutMillis: 30000, // Close idle connections after 30s
+          connectionTimeoutMillis: 2000, // Timeout for acquiring connection
+        },
+        // Enable trust proxy for proper IP detection behind reverse proxies
+        trustProxy: true,
       }),
       inject: [ConfigService],
     }),
     AppConfigModule,
-    SharedModule,
     AuthModule,
     HealthModule,
     KboModule,

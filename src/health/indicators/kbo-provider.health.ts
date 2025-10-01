@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { HealthIndicator, HealthIndicatorResult, HealthCheckError } from '@nestjs/terminus';
+import {
+  HealthIndicator,
+  HealthIndicatorResult,
+  HealthCheckError,
+} from '@nestjs/terminus';
 import { AppConfigService } from '../../config/config.service';
 
 @Injectable()
@@ -35,7 +39,7 @@ export class KboProviderHealthIndicator extends HealthIndicator {
       const hasValidConfig = this.validateKboConfiguration();
 
       return hasValidConfig;
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -49,13 +53,13 @@ export class KboProviderHealthIndicator extends HealthIndicator {
 
     // Check if timeout is reasonable
     const timeout = this.configService.kboApiTimeout;
-    if (timeout <= 0 || timeout > 60000) { // Max 60 seconds
+    if (timeout <= 0 || timeout > 60000) {
+      // Max 60 seconds
       return false;
     }
 
     // If API key is required, check if it exists (but don't validate it remotely)
     // This is a basic validation - in production you might want to validate format
-    const apiKey = this.configService.kboApiKey;
     // For now, we'll assume API key is optional and just check configuration validity
 
     return true;

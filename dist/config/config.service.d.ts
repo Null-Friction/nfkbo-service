@@ -12,4 +12,5 @@ export declare class AppConfigService {
     get isDevelopment(): boolean;
     get isProduction(): boolean;
     get isTest(): boolean;
+    get lookupKeySecret(): string;
 }

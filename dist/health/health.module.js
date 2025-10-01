@@ -7,10 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HealthModule = void 0;
-const common_1 = require("@nestjs/common");
-const terminus_1 = require("@nestjs/terminus");
 const axios_1 = require("@nestjs/axios");
+const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
+const terminus_1 = require("@nestjs/terminus");
 const health_controller_1 = require("./health.controller");
 const kbo_provider_health_1 = require("./indicators/kbo-provider.health");
 const memory_health_1 = require("./indicators/memory.health");

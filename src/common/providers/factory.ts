@@ -15,7 +15,7 @@ export class KBOProviderFactory {
     const cacheKey = `${config.type}_${config.baseUrl || 'default'}`;
 
     if (this.providers.has(cacheKey)) {
-      return this.providers.get(cacheKey);
+      return this.providers.get(cacheKey)!;
     }
 
     let provider: KBOProvider;
@@ -27,8 +27,10 @@ export class KBOProviderFactory {
       case 'mock':
         provider = new MockKBOProvider(config);
         break;
-      default:
-        throw new Error(`Unknown provider type: ${config.type}`);
+      default: {
+        const exhaustiveCheck: never = config.type;
+        throw new Error(`Unknown provider type: ${exhaustiveCheck as string}`);
+      }
     }
 
     this.providers.set(cacheKey, provider);

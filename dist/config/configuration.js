@@ -12,12 +12,13 @@ exports.configSchema = zod_1.z.object({
         username: zod_1.z.string().default('postgres'),
         password: zod_1.z.string(),
         database: zod_1.z.string().default('nfkbo'),
-        synchronize: zod_1.z.coerce.boolean().default(false),
+        synchronize: zod_1.z.coerce.boolean().default(false).refine((val) => process.env.NODE_ENV !== 'production' || val === false, { message: 'DB_SYNCHRONIZE must be false in production' }),
         logging: zod_1.z.coerce.boolean().default(false),
     }),
     auth: zod_1.z.object({
         bootstrapApiKey: zod_1.z.string().optional(),
         rateLimitWindowMs: zod_1.z.coerce.number().default(60000),
+        lookupKeySecret: zod_1.z.string().min(32),
     }),
     kbo: zod_1.z.object({
         apiKey: zod_1.z.string().optional(),
@@ -42,6 +43,7 @@ function validateConfig() {
         auth: {
             bootstrapApiKey: process.env.BOOTSTRAP_API_KEY,
             rateLimitWindowMs: process.env.RATE_LIMIT_WINDOW_MS,
+            lookupKeySecret: process.env.LOOKUP_KEY_SECRET,
         },
         kbo: {
             apiKey: process.env.KBO_API_KEY,

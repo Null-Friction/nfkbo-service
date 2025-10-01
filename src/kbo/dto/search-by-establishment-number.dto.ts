@@ -6,5 +6,5 @@ export class SearchByEstablishmentNumberDto {
   @Matches(/^2\d{9}$/, {
     message: 'Establishment number must be exactly 10 digits starting with 2',
   })
-  establishmentNumber: string;
+  establishmentNumber!: string;
 }

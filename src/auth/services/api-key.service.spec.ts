@@ -2,7 +2,6 @@ import { NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { ApiKeyEntity } from '../entities/api-key-db.entity';
 import { ApiKeyRole } from '../entities/api-key.entity';
 import { ApiKeyService } from './api-key.service';
@@ -23,6 +22,8 @@ describe('ApiKeyService', () => {
     get: jest.fn((key: string) => {
       if (key === 'auth.bootstrapApiKey') return undefined;
       if (key === 'auth.rateLimitWindowMs') return 60000;
+      if (key === 'auth.lookupKeySecret')
+        return 'test-secret-key-for-hmac-at-least-32-chars-long';
       return null;
     }),
   };
@@ -61,8 +62,8 @@ describe('ApiKeyService', () => {
 
       const mockEntity = {
         id: 'test-uuid',
-        hashPrefix: 'abcdef1234567890',
-        hashedKey: '$2b$10$hashedvalue',
+        lookupKey: 'abcdef1234567890',
+        hashedKey: '$2b$12$hashedvalue',
         name: createDto.name,
         role: createDto.role,
         isActive: true,
@@ -88,7 +89,7 @@ describe('ApiKeyService', () => {
 
   describe('validateApiKey', () => {
     it('should return null for non-existent API key', async () => {
-      mockRepository.find.mockResolvedValue([]);
+      mockRepository.findOne.mockResolvedValue(null);
 
       const validated = await service.validateApiKey('invalid_key');
 
@@ -152,7 +153,7 @@ describe('ApiKeyService', () => {
       mockRepository.findOne.mockResolvedValue(null);
 
       await expect(service.findOne('non-existent-id')).rejects.toThrow(
-        NotFoundException,
+        NotFoundException
       );
     });
   });
@@ -177,7 +178,7 @@ describe('ApiKeyService', () => {
       mockRepository.findOne.mockResolvedValue(null);
 
       await expect(service.revokeApiKey('non-existent-id')).rejects.toThrow(
-        NotFoundException,
+        NotFoundException
       );
     });
   });
@@ -201,7 +202,7 @@ describe('ApiKeyService', () => {
       mockRepository.findOne.mockResolvedValue(null);
 
       await expect(service.deleteApiKey('non-existent-id')).rejects.toThrow(
-        NotFoundException,
+        NotFoundException
       );
     });
   });

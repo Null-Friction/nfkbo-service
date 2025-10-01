@@ -34,6 +34,7 @@ export default [
         ...globals.node,
         ...globals.jest,
         ...globals.es2021,
+        NodeJS: 'readonly',
       },
     },
     plugins: {
@@ -118,6 +119,7 @@ export default [
       '@typescript-eslint/no-unsafe-call': 'off',
       '@typescript-eslint/no-unsafe-return': 'off',
       '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/unbound-method': 'off',
     },
   },
   // Apply Prettier config last to disable conflicting rules

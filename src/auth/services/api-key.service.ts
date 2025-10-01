@@ -1,4 +1,4 @@
-import { randomBytes } from 'crypto';
+import { randomBytes, createHmac } from 'crypto';
 import {
   Injectable,
   NotFoundException,
@@ -20,29 +20,33 @@ import { ApiKey, ApiKeyRole } from '../entities/api-key.entity';
 @Injectable()
 export class ApiKeyService implements OnModuleInit {
   private readonly logger = new Logger(ApiKeyService.name);
-  private bootstrapKey: { key: string; hashedKey: string } | null = null;
+  private bootstrapKeyHash: string | null = null;
 
   constructor(
     @InjectRepository(ApiKeyEntity)
     private readonly apiKeyRepository: Repository<ApiKeyEntity>,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {}
 
+  private generateLookupKey(key: string): string {
+    const secret = this.configService.get<string>('auth.lookupKeySecret')!;
+    return createHmac('sha256', secret)
+      .update(key)
+      .digest('hex')
+      .substring(0, 16);
+  }
+
   async onModuleInit() {
-    // Initialize bootstrap API key if provided
+    // Initialize bootstrap API key if provided (only store hash, not plaintext)
     const bootstrapApiKey = this.configService.get<string>(
-      'auth.bootstrapApiKey',
+      'auth.bootstrapApiKey'
     );
 
     if (bootstrapApiKey) {
       this.logger.warn(
-        'Bootstrap API key detected - this key is ephemeral and should only be used to create the first admin key',
+        'Bootstrap API key detected - this key is ephemeral and should only be used to create the first admin key'
       );
-      const hashedKey = await bcrypt.hash(bootstrapApiKey, 10);
-      this.bootstrapKey = {
-        key: bootstrapApiKey,
-        hashedKey,
-      };
+      this.bootstrapKeyHash = await bcrypt.hash(bootstrapApiKey, 12);
     }
 
     // Check if any admin keys exist
@@ -50,25 +54,25 @@ export class ApiKeyService implements OnModuleInit {
       where: { role: ApiKeyRole.ADMIN, isActive: true },
     });
 
-    if (adminCount === 0 && !this.bootstrapKey) {
+    if (adminCount === 0 && !this.bootstrapKeyHash) {
       this.logger.error(
-        'CRITICAL: No admin API keys exist and no bootstrap key provided. Set BOOTSTRAP_API_KEY environment variable.',
+        'CRITICAL: No admin API keys exist and no bootstrap key provided. Set BOOTSTRAP_API_KEY environment variable.'
       );
     }
   }
 
   async createApiKey(
     createDto: CreateApiKeyDto,
-    createdBy?: string,
+    createdBy?: string
   ): Promise<CreatedApiKeyResponseDto> {
     const key = this.generateApiKey();
-    const hashedKey = await bcrypt.hash(key, 10);
+    const hashedKey = await bcrypt.hash(key, 12);
 
-    // Extract first 16 characters of hash for indexed lookup (fixes timing attack)
-    const hashPrefix = hashedKey.substring(0, 16);
+    // Generate deterministic lookup key using HMAC (fixes timing attack)
+    const lookupKey = this.generateLookupKey(key);
 
     const apiKeyEntity = this.apiKeyRepository.create({
-      hashPrefix,
+      lookupKey,
       hashedKey,
       name: createDto.name,
       role: createDto.role,
@@ -84,7 +88,7 @@ export class ApiKeyService implements OnModuleInit {
     const savedKey = await this.apiKeyRepository.save(apiKeyEntity);
 
     this.logger.log(
-      `API key created: ${savedKey.id} (${savedKey.name}) with role ${savedKey.role}${createdBy ? ` by ${createdBy}` : ''}`,
+      `API key created: ${savedKey.id} (${savedKey.name}) with role ${savedKey.role}${createdBy ? ` by ${createdBy}` : ''}`
     );
 
     // Return key only once, then it's lost forever (security fix)
@@ -103,20 +107,17 @@ export class ApiKeyService implements OnModuleInit {
 
   async validateApiKey(
     key: string,
-    ipAddress?: string,
+    ipAddress?: string
   ): Promise<ApiKey | null> {
     // Check bootstrap key first (ephemeral, only for initial setup)
-    if (this.bootstrapKey) {
-      const isBootstrapMatch = await bcrypt.compare(
-        key,
-        this.bootstrapKey.hashedKey,
-      );
+    if (this.bootstrapKeyHash) {
+      const isBootstrapMatch = await bcrypt.compare(key, this.bootstrapKeyHash);
       if (isBootstrapMatch) {
         this.logger.warn('Bootstrap API key used - create a proper admin key');
         return {
           id: 'bootstrap',
-          key: this.bootstrapKey.key,
-          hashedKey: this.bootstrapKey.hashedKey,
+          key: '', // Never expose plaintext key
+          hashedKey: this.bootstrapKeyHash,
           name: 'Bootstrap Key',
           role: ApiKeyRole.ADMIN,
           isActive: true,
@@ -127,31 +128,21 @@ export class ApiKeyService implements OnModuleInit {
       }
     }
 
-    // Hash the provided key to get the prefix for indexed lookup
-    const hashedInput = await bcrypt.hash(key, 10);
-    const hashPrefix = hashedInput.substring(0, 16);
+    // Generate deterministic lookup key using HMAC for O(1) indexed lookup
+    const lookupKey = this.generateLookupKey(key);
 
-    // Find candidates by hash prefix (O(1) with index instead of O(n))
-    // Note: We still need to check all keys because hash prefix may have collisions
-    // But this drastically reduces the search space
-    const candidates = await this.apiKeyRepository.find({
-      where: { isActive: true },
-      take: 100, // Limit search for performance
+    // Find candidate using indexed lookup key
+    const matchedKey = await this.apiKeyRepository.findOne({
+      where: { lookupKey, isActive: true },
     });
 
-    // Use constant-time comparison approach: check ALL keys even after finding match
-    // This prevents timing attacks based on early return
-    let matchedKey: ApiKeyEntity | null = null;
-
-    for (const candidate of candidates) {
-      const isMatch = await bcrypt.compare(key, candidate.hashedKey);
-      if (isMatch && !matchedKey) {
-        matchedKey = candidate;
-        // Don't break! Continue checking to prevent timing leak
-      }
+    if (!matchedKey) {
+      return null;
     }
 
-    if (!matchedKey) {
+    // Verify the full hash with bcrypt (constant-time comparison)
+    const isMatch = await bcrypt.compare(key, matchedKey.hashedKey);
+    if (!isMatch) {
       return null;
     }
 
@@ -159,23 +150,29 @@ export class ApiKeyService implements OnModuleInit {
     if (matchedKey.expiresAt && new Date() > matchedKey.expiresAt) {
       matchedKey.isActive = false;
       await this.apiKeyRepository.save(matchedKey);
-      this.logger.warn(`API key expired: ${matchedKey.id} (${matchedKey.name})`);
+      this.logger.warn(
+        `API key expired: ${matchedKey.id} (${matchedKey.name})`
+      );
       return null;
     }
 
-    // Update last used timestamp and IP (audit trail)
-    matchedKey.lastUsedAt = new Date();
-    matchedKey.requestCount = BigInt(Number(matchedKey.requestCount) + 1);
-    if (ipAddress) {
-      matchedKey.lastUsedIp = ipAddress;
-    }
-
-    // Save asynchronously without waiting (performance optimization)
-    this.apiKeyRepository.save(matchedKey).catch((err) => {
-      this.logger.error(
-        `Failed to update API key usage stats: ${err.message}`,
-      );
-    });
+    // Update last used timestamp and IP (audit trail) in a separate transaction
+    // Use atomic increment to prevent race conditions
+    void this.apiKeyRepository
+      .createQueryBuilder()
+      .update(ApiKeyEntity)
+      .set({
+        lastUsedAt: new Date(),
+        lastUsedIp: ipAddress || matchedKey.lastUsedIp,
+        requestCount: () => 'request_count + 1',
+      })
+      .where('id = :id', { id: matchedKey.id })
+      .execute()
+      .catch((err) => {
+        this.logger.error(
+          `Failed to update API key usage stats: ${err.message}`
+        );
+      });
 
     return {
       id: matchedKey.id,
@@ -241,7 +238,7 @@ export class ApiKeyService implements OnModuleInit {
     await this.apiKeyRepository.save(apiKey);
 
     this.logger.log(
-      `API key revoked: ${apiKey.id} (${apiKey.name})${revokedBy ? ` by ${revokedBy}` : ''}`,
+      `API key revoked: ${apiKey.id} (${apiKey.name})${revokedBy ? ` by ${revokedBy}` : ''}`
     );
   }
 
@@ -255,7 +252,7 @@ export class ApiKeyService implements OnModuleInit {
     await this.apiKeyRepository.remove(apiKey);
 
     this.logger.log(
-      `API key deleted: ${id} (${apiKey.name})${deletedBy ? ` by ${deletedBy}` : ''}`,
+      `API key deleted: ${id} (${apiKey.name})${deletedBy ? ` by ${deletedBy}` : ''}`
     );
   }
 

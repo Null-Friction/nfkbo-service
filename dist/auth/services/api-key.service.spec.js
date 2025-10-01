@@ -1,15 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 const testing_1 = require("@nestjs/testing");
 const typeorm_1 = require("@nestjs/typeorm");
-const config_1 = require("@nestjs/config");
-const common_1 = require("@nestjs/common");
-const api_key_service_1 = require("./api-key.service");
 const api_key_db_entity_1 = require("../entities/api-key-db.entity");
 const api_key_entity_1 = require("../entities/api-key.entity");
+const api_key_service_1 = require("./api-key.service");
 describe('ApiKeyService', () => {
     let service;
-    let repository;
     const mockRepository = {
         create: jest.fn(),
         save: jest.fn(),
@@ -24,6 +23,8 @@ describe('ApiKeyService', () => {
                 return undefined;
             if (key === 'auth.rateLimitWindowMs')
                 return 60000;
+            if (key === 'auth.lookupKeySecret')
+                return 'test-secret-key-for-hmac-at-least-32-chars-long';
             return null;
         }),
     };
@@ -42,7 +43,6 @@ describe('ApiKeyService', () => {
             ],
         }).compile();
         service = module.get(api_key_service_1.ApiKeyService);
-        repository = module.get((0, typeorm_1.getRepositoryToken)(api_key_db_entity_1.ApiKeyEntity));
         jest.clearAllMocks();
     });
     it('should be defined', () => {
@@ -57,8 +57,8 @@ describe('ApiKeyService', () => {
             };
             const mockEntity = {
                 id: 'test-uuid',
-                hashPrefix: 'abcdef1234567890',
-                hashedKey: '$2b$10$hashedvalue',
+                lookupKey: 'abcdef1234567890',
+                hashedKey: '$2b$12$hashedvalue',
                 name: createDto.name,
                 role: createDto.role,
                 isActive: true,
@@ -80,7 +80,7 @@ describe('ApiKeyService', () => {
     });
     describe('validateApiKey', () => {
         it('should return null for non-existent API key', async () => {
-            mockRepository.find.mockResolvedValue([]);
+            mockRepository.findOne.mockResolvedValue(null);
             const validated = await service.validateApiKey('invalid_key');
             expect(validated).toBeNull();
         });

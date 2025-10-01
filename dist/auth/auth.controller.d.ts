@@ -1,6 +1,6 @@
-import { ApiKeyService } from './services/api-key.service';
-import { CreateApiKeyDto } from './dto/create-api-key.dto';
 import { ApiKeyResponseDto, CreatedApiKeyResponseDto } from './dto/api-key-response.dto';
+import { CreateApiKeyDto } from './dto/create-api-key.dto';
+import { ApiKeyService } from './services/api-key.service';
 export declare class AuthController {
     private readonly apiKeyService;
     constructor(apiKeyService: ApiKeyService);

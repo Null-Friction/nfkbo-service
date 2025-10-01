@@ -9,12 +9,18 @@ export const configSchema = z.object({
     username: z.string().default('postgres'),
     password: z.string(),
     database: z.string().default('nfkbo'),
-    synchronize: z.coerce.boolean().default(false),
+    synchronize: z.coerce
+      .boolean()
+      .default(false)
+      .refine((val) => process.env.NODE_ENV !== 'production' || val === false, {
+        message: 'DB_SYNCHRONIZE must be false in production',
+      }),
     logging: z.coerce.boolean().default(false),
   }),
   auth: z.object({
     bootstrapApiKey: z.string().optional(),
     rateLimitWindowMs: z.coerce.number().default(60000),
+    lookupKeySecret: z.string().min(32),
   }),
   kbo: z.object({
     apiKey: z.string().optional(),
@@ -42,6 +48,7 @@ export function validateConfig(): AppConfig {
     auth: {
       bootstrapApiKey: process.env.BOOTSTRAP_API_KEY,
       rateLimitWindowMs: process.env.RATE_LIMIT_WINDOW_MS,
+      lookupKeySecret: process.env.LOOKUP_KEY_SECRET,
     },
     kbo: {
       apiKey: process.env.KBO_API_KEY,
@@ -55,7 +62,9 @@ export function validateConfig(): AppConfig {
     return configSchema.parse(config);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const errors = error.issues.map(err => `${err.path.join('.')}: ${err.message}`).join('\n');
+      const errors = error.issues
+        .map((err) => `${err.path.join('.')}: ${err.message}`)
+        .join('\n');
       throw new Error(`Configuration validation failed:\n${errors}`);
     }
     throw error;

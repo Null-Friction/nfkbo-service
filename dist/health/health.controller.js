@@ -13,9 +13,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HealthController = void 0;
 const common_1 = require("@nestjs/common");
 const terminus_1 = require("@nestjs/terminus");
+const public_decorator_1 = require("../auth/decorators/public.decorator");
 const kbo_provider_health_1 = require("./indicators/kbo-provider.health");
 const memory_health_1 = require("./indicators/memory.health");
-const public_decorator_1 = require("../auth/decorators/public.decorator");
 let HealthController = HealthController_1 = class HealthController {
     constructor(health, http, kboProvider, memory) {
         this.health = health;

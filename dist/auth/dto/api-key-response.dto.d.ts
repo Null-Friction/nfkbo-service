@@ -5,8 +5,8 @@ export declare class ApiKeyResponseDto {
     role: ApiKeyRole;
     isActive: boolean;
     createdAt: Date;
-    lastUsedAt?: Date;
-    expiresAt?: Date;
+    lastUsedAt?: Date | null;
+    expiresAt?: Date | null;
     rateLimit: number;
     requestCount: number;
 }

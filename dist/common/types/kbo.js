@@ -5,7 +5,11 @@ const zod_1 = require("zod");
 exports.KBOLanguageSchema = zod_1.z.enum(['unknown', 'nl', 'en', 'fr', 'de']);
 exports.KBOEntityTypeSchema = zod_1.z.enum(['enterprise', 'establishment']);
 exports.KBOEnterpriseTypeSchema = zod_1.z.enum(['natural', 'entity']);
-exports.KBODenominationTypeSchema = zod_1.z.enum(['social', 'abbreviation', 'commercial']);
+exports.KBODenominationTypeSchema = zod_1.z.enum([
+    'social',
+    'abbreviation',
+    'commercial',
+]);
 exports.MultilingualTextSchema = zod_1.z.object({
     nl: zod_1.z.string().optional(),
     fr: zod_1.z.string().optional(),

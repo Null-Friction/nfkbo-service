@@ -18,6 +18,7 @@ export declare const configSchema: z.ZodObject<{
     auth: z.ZodObject<{
         bootstrapApiKey: z.ZodOptional<z.ZodString>;
         rateLimitWindowMs: z.ZodDefault<z.ZodCoercedNumber<unknown>>;
+        lookupKeySecret: z.ZodString;
     }, z.core.$strip>;
     kbo: z.ZodObject<{
         apiKey: z.ZodOptional<z.ZodString>;

@@ -23,7 +23,7 @@ __decorate([
     (0, typeorm_1.Column)({ unique: true, length: 16 }),
     (0, typeorm_1.Index)(),
     __metadata("design:type", String)
-], ApiKeyEntity.prototype, "hashPrefix", void 0);
+], ApiKeyEntity.prototype, "lookupKey", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'text' }),
     __metadata("design:type", String)
@@ -54,11 +54,11 @@ __decorate([
 ], ApiKeyEntity.prototype, "updatedAt", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'timestamp', nullable: true }),
-    __metadata("design:type", Date)
+    __metadata("design:type", Object)
 ], ApiKeyEntity.prototype, "lastUsedAt", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'timestamp', nullable: true }),
-    __metadata("design:type", Date)
+    __metadata("design:type", Object)
 ], ApiKeyEntity.prototype, "expiresAt", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'int', default: 100 }),
@@ -70,14 +70,13 @@ __decorate([
 ], ApiKeyEntity.prototype, "requestCount", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], ApiKeyEntity.prototype, "createdBy", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], ApiKeyEntity.prototype, "lastUsedIp", void 0);
 exports.ApiKeyEntity = ApiKeyEntity = __decorate([
-    (0, typeorm_1.Entity)('api_keys'),
-    (0, typeorm_1.Index)(['hashPrefix'])
+    (0, typeorm_1.Entity)('api_keys')
 ], ApiKeyEntity);
 //# sourceMappingURL=api-key-db.entity.js.map

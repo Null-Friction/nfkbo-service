@@ -9,5 +9,5 @@ export class SearchByNameDto {
   @MaxLength(100, {
     message: 'Company name must not exceed 100 characters',
   })
-  name: string;
+  name!: string;
 }

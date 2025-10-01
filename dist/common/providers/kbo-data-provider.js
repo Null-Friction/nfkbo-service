@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KBODataProvider = void 0;
-const base_kbo_provider_1 = require("./base-kbo-provider");
 const kbo_1 = require("../types/kbo");
+const base_kbo_provider_1 = require("./base-kbo-provider");
 const errors_1 = require("./errors");
 class KBODataProvider extends base_kbo_provider_1.BaseKBOProvider {
     constructor(config) {
@@ -23,8 +23,8 @@ class KBODataProvider extends base_kbo_provider_1.BaseKBOProvider {
                 return null;
             }
             const primaryAddress = enterprise.addresses[0];
-            const primaryDenomination = enterprise.denominations.find(d => d.type === 'social')
-                || enterprise.denominations[0];
+            const primaryDenomination = enterprise.denominations.find((d) => d.type === 'social') ||
+                enterprise.denominations[0];
             return {
                 number: enterprise.enterpriseNumber,
                 name: primaryDenomination?.value || '',
@@ -35,7 +35,9 @@ class KBODataProvider extends base_kbo_provider_1.BaseKBOProvider {
                     country: primaryAddress?.countryCode || 'BE',
                 },
                 status: enterprise.active ? 'active' : 'inactive',
-                legalForm: enterprise.juridicalForm?.description.nl || enterprise.juridicalForm?.description.fr || '',
+                legalForm: enterprise.juridicalForm?.description.nl ||
+                    enterprise.juridicalForm?.description.fr ||
+                    '',
                 establishmentDate: enterprise.dateStart,
             };
         }
@@ -55,10 +57,11 @@ class KBODataProvider extends base_kbo_provider_1.BaseKBOProvider {
                 denomination: name,
                 limit: 50,
             });
-            return Promise.all(response.data.map(async (enterprise) => {
+            const companies = await Promise.all(response.data.map(async (enterprise) => {
                 const company = await this.searchByNumber(enterprise.enterpriseNumber);
                 return company;
             }));
+            return companies.filter((c) => c !== null);
         }
         catch (error) {
             if (error instanceof errors_1.KBOValidationError) {
@@ -72,12 +75,12 @@ class KBODataProvider extends base_kbo_provider_1.BaseKBOProvider {
             if (!enterpriseNumber?.trim()) {
                 throw new errors_1.KBOValidationError('Enterprise number is required');
             }
-            const [enterpriseResponse, denominationsResponse, addressesResponse, establishmentsResponse, activitiesResponse] = await Promise.allSettled([
+            const [enterpriseResponse, denominationsResponse, addressesResponse, establishmentsResponse, activitiesResponse,] = await Promise.allSettled([
                 this.client.get(`/enterprises/${enterpriseNumber}`),
                 this.client.get(`/enterprises/${enterpriseNumber}/denominations`),
                 this.client.get(`/enterprises/${enterpriseNumber}/addresses`),
                 this.client.get(`/enterprises/${enterpriseNumber}/establishments`),
-                this.client.get(`/enterprises/${enterpriseNumber}/activities`)
+                this.client.get(`/enterprises/${enterpriseNumber}/activities`),
             ]);
             if (enterpriseResponse.status === 'rejected') {
                 if (enterpriseResponse.reason?.response?.status === 404) {
@@ -118,11 +121,11 @@ class KBODataProvider extends base_kbo_provider_1.BaseKBOProvider {
             if (!establishmentNumber?.trim()) {
                 throw new errors_1.KBOValidationError('Establishment number is required');
             }
-            const [establishmentResponse, denominationsResponse, addressesResponse, activitiesResponse] = await Promise.allSettled([
+            const [establishmentResponse, denominationsResponse, addressesResponse, activitiesResponse,] = await Promise.allSettled([
                 this.client.get(`/establishments/${establishmentNumber}`),
                 this.client.get(`/establishments/${establishmentNumber}/denominations`),
                 this.client.get(`/establishments/${establishmentNumber}/addresses`),
-                this.client.get(`/establishments/${establishmentNumber}/activities`)
+                this.client.get(`/establishments/${establishmentNumber}/activities`),
             ]);
             if (establishmentResponse.status === 'rejected') {
                 if (establishmentResponse.reason?.response?.status === 404) {

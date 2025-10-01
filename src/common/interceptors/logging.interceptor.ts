@@ -27,14 +27,20 @@ export class LoggingInterceptor implements NestInterceptor {
         next: (responseBody) => {
           const endTime = Date.now();
           const duration = endTime - startTime;
-          this.logResponse(request, response, responseBody, duration, correlationId);
+          this.logResponse(
+            request,
+            response,
+            responseBody,
+            duration,
+            correlationId
+          );
         },
         error: (error) => {
           const endTime = Date.now();
           const duration = endTime - startTime;
           this.logError(request, response, error, duration, correlationId);
         },
-      }),
+      })
     );
   }
 
@@ -44,29 +50,26 @@ export class LoggingInterceptor implements NestInterceptor {
     const contentType = headers['content-type'];
     const clientIp = request.ip || request.socket.remoteAddress || 'unknown';
 
-    this.logger.log(
-      `Incoming ${method} ${url}`,
-      {
-        type: 'REQUEST',
-        correlationId,
-        request: {
-          method,
-          url,
-          userAgent,
-          clientIp,
-          contentType,
-          query: Object.keys(query || {}).length > 0 ? query : undefined,
-          params: Object.keys(params || {}).length > 0 ? params : undefined,
-          bodySize: body ? JSON.stringify(body).length : 0,
-          headers: {
-            authorization: headers.authorization ? '[REDACTED]' : undefined,
-            'content-length': headers['content-length'],
-            accept: headers.accept,
-          },
+    this.logger.log(`Incoming ${method} ${url}`, {
+      type: 'REQUEST',
+      correlationId,
+      request: {
+        method,
+        url,
+        userAgent,
+        clientIp,
+        contentType,
+        query: Object.keys(query || {}).length > 0 ? query : undefined,
+        params: Object.keys(params || {}).length > 0 ? params : undefined,
+        bodySize: body ? JSON.stringify(body).length : 0,
+        headers: {
+          authorization: headers.authorization ? '[REDACTED]' : undefined,
+          'content-length': headers['content-length'],
+          accept: headers.accept,
         },
-        timestamp: new Date().toISOString(),
       },
-    );
+      timestamp: new Date().toISOString(),
+    });
   }
 
   private logResponse(
@@ -74,12 +77,13 @@ export class LoggingInterceptor implements NestInterceptor {
     response: Response,
     responseBody: any,
     duration: number,
-    correlationId?: string,
+    correlationId?: string
   ): void {
     const { method, url } = request;
     const { statusCode } = response;
 
-    const logLevel = statusCode >= 400 ? 'error' : statusCode >= 300 ? 'warn' : 'log';
+    const logLevel =
+      statusCode >= 400 ? 'error' : statusCode >= 300 ? 'warn' : 'log';
     const isSlowRequest = duration > 1000; // Slow query detection
 
     this.logger[logLevel](
@@ -99,26 +103,29 @@ export class LoggingInterceptor implements NestInterceptor {
           url,
         },
         timestamp: new Date().toISOString(),
-      },
+      }
     );
 
     // Log slow requests with warning level
     if (isSlowRequest && statusCode < 400) {
-      this.logger.warn(`Slow request detected: ${method} ${url} took ${duration}ms`, {
-        type: 'SLOW_REQUEST',
-        correlationId,
-        duration,
-        threshold: 1000,
-      });
+      this.logger.warn(
+        `Slow request detected: ${method} ${url} took ${duration}ms`,
+        {
+          type: 'SLOW_REQUEST',
+          correlationId,
+          duration,
+          threshold: 1000,
+        }
+      );
     }
   }
 
   private logError(
     request: Request,
-    response: Response,
+    _response: Response,
     error: any,
     duration: number,
-    correlationId?: string,
+    correlationId?: string
   ): void {
     const { method, url } = request;
     const statusCode = error.status || error.statusCode || 500;
@@ -143,7 +150,7 @@ export class LoggingInterceptor implements NestInterceptor {
           url,
         },
         timestamp: new Date().toISOString(),
-      },
+      }
     );
   }
 }

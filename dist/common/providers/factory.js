@@ -17,8 +17,10 @@ class KBOProviderFactory {
             case 'mock':
                 provider = new mock_kbo_provider_1.MockKBOProvider(config);
                 break;
-            default:
-                throw new Error(`Unknown provider type: ${config.type}`);
+            default: {
+                const exhaustiveCheck = config.type;
+                throw new Error(`Unknown provider type: ${exhaustiveCheck}`);
+            }
         }
         this.providers.set(cacheKey, provider);
         return provider;
