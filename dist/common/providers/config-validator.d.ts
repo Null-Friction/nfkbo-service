@@ -17,9 +17,9 @@ export declare const KBOProviderFactoryConfigSchema: z.ZodObject<{
 export declare function validateProviderConfig(config: unknown): KBOProviderConfig;
 export declare function validateFactoryConfig(config: unknown): {
     type: "kbo-data" | "mock";
-    apiKey?: string;
-    baseUrl?: string;
-    timeout?: number;
+    apiKey?: string | undefined;
+    baseUrl?: string | undefined;
+    timeout?: number | undefined;
 };
 export declare function validateEnterpriseNumber(enterpriseNumber: string): void;
 export declare function validateEstablishmentNumber(establishmentNumber: string): void;

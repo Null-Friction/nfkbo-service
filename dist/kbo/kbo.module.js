@@ -8,12 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KboModule = void 0;
 const common_1 = require("@nestjs/common");
-const kbo_controller_1 = require("./kbo.controller");
-const kbo_service_1 = require("./kbo.service");
 const config_module_1 = require("../config/config.module");
 const config_service_1 = require("../config/config.service");
-const tokens_1 = require("./tokens");
+const kbo_controller_1 = require("./kbo.controller");
+const kbo_service_1 = require("./kbo.service");
 const kbo_provider_factory_1 = require("./providers/kbo-provider.factory");
+const tokens_1 = require("./tokens");
 let KboModule = class KboModule {
 };
 exports.KboModule = KboModule;

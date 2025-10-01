@@ -14,12 +14,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var ApiKeyService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiKeyService = void 0;
-const common_1 = require("@nestjs/common");
-const typeorm_1 = require("@nestjs/typeorm");
-const typeorm_2 = require("typeorm");
 const crypto_1 = require("crypto");
-const bcrypt = require("bcrypt");
+const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
+const typeorm_1 = require("@nestjs/typeorm");
+const bcrypt = require("bcrypt");
+const typeorm_2 = require("typeorm");
 const api_key_db_entity_1 = require("../entities/api-key-db.entity");
 const api_key_entity_1 = require("../entities/api-key.entity");
 let ApiKeyService = ApiKeyService_1 = class ApiKeyService {
@@ -27,31 +27,34 @@ let ApiKeyService = ApiKeyService_1 = class ApiKeyService {
         this.apiKeyRepository = apiKeyRepository;
         this.configService = configService;
         this.logger = new common_1.Logger(ApiKeyService_1.name);
-        this.bootstrapKey = null;
+        this.bootstrapKeyHash = null;
+    }
+    generateLookupKey(key) {
+        const secret = this.configService.get('auth.lookupKeySecret');
+        return (0, crypto_1.createHmac)('sha256', secret)
+            .update(key)
+            .digest('hex')
+            .substring(0, 16);
     }
     async onModuleInit() {
         const bootstrapApiKey = this.configService.get('auth.bootstrapApiKey');
         if (bootstrapApiKey) {
             this.logger.warn('Bootstrap API key detected - this key is ephemeral and should only be used to create the first admin key');
-            const hashedKey = await bcrypt.hash(bootstrapApiKey, 10);
-            this.bootstrapKey = {
-                key: bootstrapApiKey,
-                hashedKey,
-            };
+            this.bootstrapKeyHash = await bcrypt.hash(bootstrapApiKey, 12);
         }
         const adminCount = await this.apiKeyRepository.count({
             where: { role: api_key_entity_1.ApiKeyRole.ADMIN, isActive: true },
         });
-        if (adminCount === 0 && !this.bootstrapKey) {
+        if (adminCount === 0 && !this.bootstrapKeyHash) {
             this.logger.error('CRITICAL: No admin API keys exist and no bootstrap key provided. Set BOOTSTRAP_API_KEY environment variable.');
         }
     }
     async createApiKey(createDto, createdBy) {
         const key = this.generateApiKey();
-        const hashedKey = await bcrypt.hash(key, 10);
-        const hashPrefix = hashedKey.substring(0, 16);
+        const hashedKey = await bcrypt.hash(key, 12);
+        const lookupKey = this.generateLookupKey(key);
         const apiKeyEntity = this.apiKeyRepository.create({
-            hashPrefix,
+            lookupKey,
             hashedKey,
             name: createDto.name,
             role: createDto.role,
@@ -78,14 +81,14 @@ let ApiKeyService = ApiKeyService_1 = class ApiKeyService {
         };
     }
     async validateApiKey(key, ipAddress) {
-        if (this.bootstrapKey) {
-            const isBootstrapMatch = await bcrypt.compare(key, this.bootstrapKey.hashedKey);
+        if (this.bootstrapKeyHash) {
+            const isBootstrapMatch = await bcrypt.compare(key, this.bootstrapKeyHash);
             if (isBootstrapMatch) {
                 this.logger.warn('Bootstrap API key used - create a proper admin key');
                 return {
                     id: 'bootstrap',
-                    key: this.bootstrapKey.key,
-                    hashedKey: this.bootstrapKey.hashedKey,
+                    key: '',
+                    hashedKey: this.bootstrapKeyHash,
                     name: 'Bootstrap Key',
                     role: api_key_entity_1.ApiKeyRole.ADMIN,
                     isActive: true,
@@ -95,20 +98,15 @@ let ApiKeyService = ApiKeyService_1 = class ApiKeyService {
                 };
             }
         }
-        const hashedInput = await bcrypt.hash(key, 10);
-        const hashPrefix = hashedInput.substring(0, 16);
-        const candidates = await this.apiKeyRepository.find({
-            where: { isActive: true },
-            take: 100,
+        const lookupKey = this.generateLookupKey(key);
+        const matchedKey = await this.apiKeyRepository.findOne({
+            where: { lookupKey, isActive: true },
         });
-        let matchedKey = null;
-        for (const candidate of candidates) {
-            const isMatch = await bcrypt.compare(key, candidate.hashedKey);
-            if (isMatch && !matchedKey) {
-                matchedKey = candidate;
-            }
-        }
         if (!matchedKey) {
+            return null;
+        }
+        const isMatch = await bcrypt.compare(key, matchedKey.hashedKey);
+        if (!isMatch) {
             return null;
         }
         if (matchedKey.expiresAt && new Date() > matchedKey.expiresAt) {
@@ -117,12 +115,17 @@ let ApiKeyService = ApiKeyService_1 = class ApiKeyService {
             this.logger.warn(`API key expired: ${matchedKey.id} (${matchedKey.name})`);
             return null;
         }
-        matchedKey.lastUsedAt = new Date();
-        matchedKey.requestCount = BigInt(Number(matchedKey.requestCount) + 1);
-        if (ipAddress) {
-            matchedKey.lastUsedIp = ipAddress;
-        }
-        this.apiKeyRepository.save(matchedKey).catch((err) => {
+        void this.apiKeyRepository
+            .createQueryBuilder()
+            .update(api_key_db_entity_1.ApiKeyEntity)
+            .set({
+            lastUsedAt: new Date(),
+            lastUsedIp: ipAddress || matchedKey.lastUsedIp,
+            requestCount: () => 'request_count + 1',
+        })
+            .where('id = :id', { id: matchedKey.id })
+            .execute()
+            .catch((err) => {
             this.logger.error(`Failed to update API key usage stats: ${err.message}`);
         });
         return {

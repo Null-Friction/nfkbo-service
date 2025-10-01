@@ -303,21 +303,3 @@ export interface KBOProviderConfig {
     baseUrl?: string;
     timeout?: number;
 }
-export interface EnterpriseSearchParams {
-    enterpriseNumber?: string;
-    vatNumber?: string;
-    denomination?: string;
-    active?: boolean;
-    zipcode?: string;
-    page?: number;
-    limit?: number;
-}
-export interface EstablishmentSearchParams {
-    enterpriseNumber?: string;
-    establishmentNumber?: string;
-    denomination?: string;
-    active?: boolean;
-    zipcode?: string;
-    page?: number;
-    limit?: number;
-}

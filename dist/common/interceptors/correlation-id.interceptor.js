@@ -7,8 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CorrelationIdInterceptor = void 0;
-const common_1 = require("@nestjs/common");
 const crypto_1 = require("crypto");
+const common_1 = require("@nestjs/common");
 let CorrelationIdInterceptor = class CorrelationIdInterceptor {
     intercept(context, next) {
         const request = context.switchToHttp().getRequest();

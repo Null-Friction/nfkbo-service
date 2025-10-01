@@ -1,16 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const testing_1 = require("@nestjs/testing");
 const common_1 = require("@nestjs/common");
-const core_1 = require("@nestjs/core");
 const config_1 = require("@nestjs/config");
-const api_key_guard_1 = require("./api-key.guard");
-const api_key_service_1 = require("../services/api-key.service");
+const core_1 = require("@nestjs/core");
+const testing_1 = require("@nestjs/testing");
 const api_key_entity_1 = require("../entities/api-key.entity");
+const api_key_service_1 = require("../services/api-key.service");
+const api_key_guard_1 = require("./api-key.guard");
 describe('ApiKeyGuard', () => {
     let guard;
-    let apiKeyService;
-    let reflector;
     const mockApiKeyService = {
         validateApiKey: jest.fn(),
     };
@@ -50,8 +48,6 @@ describe('ApiKeyGuard', () => {
             ],
         }).compile();
         guard = module.get(api_key_guard_1.ApiKeyGuard);
-        apiKeyService = module.get(api_key_service_1.ApiKeyService);
-        reflector = module.get(core_1.Reflector);
         jest.clearAllMocks();
     });
     it('should be defined', () => {

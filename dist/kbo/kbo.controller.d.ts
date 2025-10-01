@@ -1,6 +1,6 @@
-import { KboService } from './kbo.service';
 import { KBOCompany, EnterpriseComplete, EstablishmentComplete, KBOApiResponse, Enterprise, Establishment } from '../common/types';
 import { SearchByNumberDto, SearchByNameDto, GetEnterpriseDto, SearchByEstablishmentNumberDto, EnterpriseSearchDto, EstablishmentSearchDto } from './dto';
+import { KboService } from './kbo.service';
 export declare class KboController {
     private readonly kboService;
     constructor(kboService: KboService);

@@ -43,6 +43,9 @@ let AppConfigService = class AppConfigService {
     get isTest() {
         return this.nodeEnv === 'test';
     }
+    get lookupKeySecret() {
+        return this.configService.get('auth.lookupKeySecret', { infer: true });
+    }
 };
 exports.AppConfigService = AppConfigService;
 exports.AppConfigService = AppConfigService = __decorate([

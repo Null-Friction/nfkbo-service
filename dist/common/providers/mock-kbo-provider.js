@@ -18,7 +18,7 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
                 typeDescription: {
                     nl: 'Rechtspersoon',
                     fr: 'Personne morale',
-                    en: 'Legal entity'
+                    en: 'Legal entity',
                 },
                 dateStart: '2020-01-15',
                 juridicalForm: {
@@ -26,17 +26,17 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
                     description: {
                         nl: 'Besloten vennootschap',
                         fr: 'Société privée à responsabilité limitée',
-                        en: 'Private limited company'
-                    }
+                        en: 'Private limited company',
+                    },
                 },
                 juridicalSituation: {
                     code: '000',
                     description: {
                         nl: 'Normale toestand',
                         fr: 'Situation normale',
-                        en: 'Normal situation'
+                        en: 'Normal situation',
                     },
-                    dateStart: '2020-01-15'
+                    dateStart: '2020-01-15',
                 },
                 denominations: [
                     {
@@ -48,10 +48,10 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
                         typeDescription: {
                             nl: 'Maatschappelijke benaming',
                             fr: 'Dénomination sociale',
-                            en: 'Corporate name'
+                            en: 'Corporate name',
                         },
-                        dateStart: '2020-01-15'
-                    }
+                        dateStart: '2020-01-15',
+                    },
                 ],
                 addresses: [
                     {
@@ -59,40 +59,40 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
                         entityType: 'enterprise',
                         street: {
                             nl: 'Teststraat 123',
-                            fr: 'Rue de Test 123'
+                            fr: 'Rue de Test 123',
                         },
                         addressNumber: '123',
                         zipcode: '1000',
                         city: {
                             nl: 'Brussel',
                             fr: 'Bruxelles',
-                            en: 'Brussels'
+                            en: 'Brussels',
                         },
                         countryCode: 'BE',
-                        dateStart: '2020-01-15'
-                    }
+                        dateStart: '2020-01-15',
+                    },
                 ],
                 establishments: [
                     {
                         enterpriseNumber: '0123456789',
                         establishmentNumber: '2123456789',
                         active: true,
-                        dateStart: '2020-01-15'
-                    }
+                        dateStart: '2020-01-15',
+                    },
                 ],
                 activities: [
                     {
                         naceVersion: 2008,
                         naceCode: '62010',
                         description: {
-                            nl: 'Ontwikkeling van computerprogramma\'s',
+                            nl: "Ontwikkeling van computerprogramma's",
                             fr: 'Programmation informatique',
-                            en: 'Computer programming activities'
+                            en: 'Computer programming activities',
                         },
                         classification: 'MAIN',
-                        dateStart: '2020-01-15'
-                    }
-                ]
+                        dateStart: '2020-01-15',
+                    },
+                ],
             },
             {
                 enterpriseNumber: '0987654321',
@@ -102,7 +102,7 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
                 typeDescription: {
                     nl: 'Rechtspersoon',
                     fr: 'Personne morale',
-                    en: 'Legal entity'
+                    en: 'Legal entity',
                 },
                 dateStart: '2015-03-20',
                 dateEnd: '2023-12-31',
@@ -111,17 +111,17 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
                     description: {
                         nl: 'Naamloze vennootschap',
                         fr: 'Société anonyme',
-                        en: 'Public limited company'
-                    }
+                        en: 'Public limited company',
+                    },
                 },
                 juridicalSituation: {
                     code: '002',
                     description: {
                         nl: 'Vereffening',
                         fr: 'Liquidation',
-                        en: 'Liquidation'
+                        en: 'Liquidation',
                     },
-                    dateStart: '2023-12-31'
+                    dateStart: '2023-12-31',
                 },
                 denominations: [
                     {
@@ -133,10 +133,10 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
                         typeDescription: {
                             nl: 'Maatschappelijke benaming',
                             fr: 'Dénomination sociale',
-                            en: 'Corporate name'
+                            en: 'Corporate name',
                         },
-                        dateStart: '2015-03-20'
-                    }
+                        dateStart: '2015-03-20',
+                    },
                 ],
                 addresses: [
                     {
@@ -144,18 +144,18 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
                         entityType: 'enterprise',
                         street: {
                             nl: 'Oude Laan 456',
-                            fr: 'Avenue Ancienne 456'
+                            fr: 'Avenue Ancienne 456',
                         },
                         addressNumber: '456',
                         zipcode: '2000',
                         city: {
                             nl: 'Antwerpen',
                             fr: 'Anvers',
-                            en: 'Antwerp'
+                            en: 'Antwerp',
                         },
                         countryCode: 'BE',
-                        dateStart: '2015-03-20'
-                    }
+                        dateStart: '2015-03-20',
+                    },
                 ],
                 establishments: [],
                 activities: [
@@ -165,13 +165,13 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
                         description: {
                             nl: 'Advisering op het gebied van bedrijfsbeheer',
                             fr: 'Conseil pour les affaires et autres conseils de gestion',
-                            en: 'Business and other management consultancy activities'
+                            en: 'Business and other management consultancy activities',
                         },
                         classification: 'MAIN',
-                        dateStart: '2015-03-20'
-                    }
-                ]
-            }
+                        dateStart: '2015-03-20',
+                    },
+                ],
+            },
         ];
         const mockEstablishments = [
             {
@@ -189,10 +189,10 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
                         typeDescription: {
                             nl: 'Handelsnaam',
                             fr: 'Nom commercial',
-                            en: 'Trade name'
+                            en: 'Trade name',
                         },
-                        dateStart: '2020-01-15'
-                    }
+                        dateStart: '2020-01-15',
+                    },
                 ],
                 addresses: [
                     {
@@ -200,51 +200,51 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
                         entityType: 'establishment',
                         street: {
                             nl: 'Teststraat 123',
-                            fr: 'Rue de Test 123'
+                            fr: 'Rue de Test 123',
                         },
                         addressNumber: '123',
                         zipcode: '1000',
                         city: {
                             nl: 'Brussel',
                             fr: 'Bruxelles',
-                            en: 'Brussels'
+                            en: 'Brussels',
                         },
                         countryCode: 'BE',
-                        dateStart: '2020-01-15'
-                    }
+                        dateStart: '2020-01-15',
+                    },
                 ],
                 activities: [
                     {
                         naceVersion: 2008,
                         naceCode: '62010',
                         description: {
-                            nl: 'Ontwikkeling van computerprogramma\'s',
+                            nl: "Ontwikkeling van computerprogramma's",
                             fr: 'Programmation informatique',
-                            en: 'Computer programming activities'
+                            en: 'Computer programming activities',
                         },
                         classification: 'MAIN',
-                        dateStart: '2020-01-15'
-                    }
-                ]
-            }
+                        dateStart: '2020-01-15',
+                    },
+                ],
+            },
         ];
         return {
             enterprises: mockEnterprises,
-            establishments: mockEstablishments
+            establishments: mockEstablishments,
         };
     }
     async searchByNumber(number) {
         if (!number?.trim()) {
             throw new errors_1.KBOValidationError('Enterprise number is required');
         }
-        await new Promise(resolve => setTimeout(resolve, 100));
-        const enterprise = this.mockData.enterprises.find(e => e.enterpriseNumber === number);
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        const enterprise = this.mockData.enterprises.find((e) => e.enterpriseNumber === number);
         if (!enterprise) {
             return null;
         }
         const primaryAddress = enterprise.addresses[0];
-        const primaryDenomination = enterprise.denominations.find(d => d.type === 'social')
-            || enterprise.denominations[0];
+        const primaryDenomination = enterprise.denominations.find((d) => d.type === 'social') ||
+            enterprise.denominations[0];
         return {
             number: enterprise.enterpriseNumber,
             name: primaryDenomination?.value || '',
@@ -255,7 +255,9 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
                 country: primaryAddress?.countryCode || 'BE',
             },
             status: enterprise.active ? 'active' : 'inactive',
-            legalForm: enterprise.juridicalForm?.description.nl || enterprise.juridicalForm?.description.fr || '',
+            legalForm: enterprise.juridicalForm?.description.nl ||
+                enterprise.juridicalForm?.description.fr ||
+                '',
             establishmentDate: enterprise.dateStart,
         };
     }
@@ -263,46 +265,47 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
         if (!name?.trim()) {
             throw new errors_1.KBOValidationError('Company name is required');
         }
-        await new Promise(resolve => setTimeout(resolve, 150));
-        const matchingEnterprises = this.mockData.enterprises.filter(enterprise => enterprise.denominations.some(denomination => denomination.value.toLowerCase().includes(name.toLowerCase())));
-        return Promise.all(matchingEnterprises.map(async (enterprise) => {
+        await new Promise((resolve) => setTimeout(resolve, 150));
+        const matchingEnterprises = this.mockData.enterprises.filter((enterprise) => enterprise.denominations.some((denomination) => denomination.value.toLowerCase().includes(name.toLowerCase())));
+        const companies = await Promise.all(matchingEnterprises.map(async (enterprise) => {
             const company = await this.searchByNumber(enterprise.enterpriseNumber);
             return company;
         }));
+        return companies.filter((c) => c !== null);
     }
     async getEnterprise(enterpriseNumber) {
         if (!enterpriseNumber?.trim()) {
             throw new errors_1.KBOValidationError('Enterprise number is required');
         }
-        await new Promise(resolve => setTimeout(resolve, 200));
-        const enterprise = this.mockData.enterprises.find(e => e.enterpriseNumber === enterpriseNumber);
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        const enterprise = this.mockData.enterprises.find((e) => e.enterpriseNumber === enterpriseNumber);
         return enterprise || null;
     }
     async getEstablishment(establishmentNumber) {
         if (!establishmentNumber?.trim()) {
             throw new errors_1.KBOValidationError('Establishment number is required');
         }
-        await new Promise(resolve => setTimeout(resolve, 200));
-        const establishment = this.mockData.establishments.find(e => e.establishmentNumber === establishmentNumber);
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        const establishment = this.mockData.establishments.find((e) => e.establishmentNumber === establishmentNumber);
         return establishment || null;
     }
     async searchEnterprises(params) {
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await new Promise((resolve) => setTimeout(resolve, 300));
         let filteredEnterprises = [...this.mockData.enterprises];
         if (params.enterpriseNumber) {
-            filteredEnterprises = filteredEnterprises.filter(e => e.enterpriseNumber.includes(params.enterpriseNumber));
+            filteredEnterprises = filteredEnterprises.filter((e) => e.enterpriseNumber.includes(params.enterpriseNumber));
         }
         if (params.vatNumber) {
-            filteredEnterprises = filteredEnterprises.filter(e => e.vatNumber?.includes(params.vatNumber));
+            filteredEnterprises = filteredEnterprises.filter((e) => e.vatNumber?.includes(params.vatNumber));
         }
         if (params.denomination) {
-            filteredEnterprises = filteredEnterprises.filter(e => e.denominations.some(d => d.value.toLowerCase().includes(params.denomination.toLowerCase())));
+            filteredEnterprises = filteredEnterprises.filter((e) => e.denominations.some((d) => d.value.toLowerCase().includes(params.denomination.toLowerCase())));
         }
         if (params.active !== undefined) {
-            filteredEnterprises = filteredEnterprises.filter(e => e.active === params.active);
+            filteredEnterprises = filteredEnterprises.filter((e) => e.active === params.active);
         }
         if (params.zipcode) {
-            filteredEnterprises = filteredEnterprises.filter(e => e.addresses.some(a => a.zipcode === params.zipcode));
+            filteredEnterprises = filteredEnterprises.filter((e) => e.addresses.some((a) => a.zipcode === params.zipcode));
         }
         const page = params.page || 1;
         const limit = params.limit || 20;
@@ -320,22 +323,22 @@ class MockKBOProvider extends base_kbo_provider_1.BaseKBOProvider {
         };
     }
     async searchEstablishments(params) {
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await new Promise((resolve) => setTimeout(resolve, 300));
         let filteredEstablishments = [...this.mockData.establishments];
         if (params.enterpriseNumber) {
-            filteredEstablishments = filteredEstablishments.filter(e => e.enterpriseNumber.includes(params.enterpriseNumber));
+            filteredEstablishments = filteredEstablishments.filter((e) => e.enterpriseNumber.includes(params.enterpriseNumber));
         }
         if (params.establishmentNumber) {
-            filteredEstablishments = filteredEstablishments.filter(e => e.establishmentNumber.includes(params.establishmentNumber));
+            filteredEstablishments = filteredEstablishments.filter((e) => e.establishmentNumber.includes(params.establishmentNumber));
         }
         if (params.denomination) {
-            filteredEstablishments = filteredEstablishments.filter(e => e.denominations.some(d => d.value.toLowerCase().includes(params.denomination.toLowerCase())));
+            filteredEstablishments = filteredEstablishments.filter((e) => e.denominations.some((d) => d.value.toLowerCase().includes(params.denomination.toLowerCase())));
         }
         if (params.active !== undefined) {
-            filteredEstablishments = filteredEstablishments.filter(e => e.active === params.active);
+            filteredEstablishments = filteredEstablishments.filter((e) => e.active === params.active);
         }
         if (params.zipcode) {
-            filteredEstablishments = filteredEstablishments.filter(e => e.addresses.some(a => a.zipcode === params.zipcode));
+            filteredEstablishments = filteredEstablishments.filter((e) => e.addresses.some((a) => a.zipcode === params.zipcode));
         }
         const page = params.page || 1;
         const limit = params.limit || 20;

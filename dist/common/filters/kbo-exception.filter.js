@@ -27,8 +27,8 @@ let KboExceptionFilter = KboExceptionFilter_1 = class KboExceptionFilter {
             code: exception.code,
             timestamp: new Date().toISOString(),
             path: request.url,
-            ...(correlationId && { correlationId }),
-            ...(exception.details && { details: exception.details }),
+            ...(correlationId ? { correlationId } : {}),
+            ...(exception.details ? { details: exception.details } : {}),
         };
         this.logKboError(exception, request, correlationId);
         response.status(status).json(errorResponse);

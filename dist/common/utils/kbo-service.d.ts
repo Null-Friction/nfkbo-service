@@ -13,8 +13,8 @@ export declare class KBOService {
         };
         status: "active" | "inactive" | "dissolved";
         legalForm: string;
-        establishmentDate?: string;
-    }>;
+        establishmentDate?: string | undefined;
+    } | null>;
     searchCompaniesByName(name: string): Promise<{
         number: string;
         name: string;
@@ -26,10 +26,10 @@ export declare class KBOService {
         };
         status: "active" | "inactive" | "dissolved";
         legalForm: string;
-        establishmentDate?: string;
+        establishmentDate?: string | undefined;
     }[]>;
-    getEnterpriseDetails(enterpriseNumber: string): Promise<import("../providers").EnterpriseComplete>;
-    getEstablishmentDetails(establishmentNumber: string): Promise<import("../providers").EstablishmentComplete>;
+    getEnterpriseDetails(enterpriseNumber: string): Promise<import("../providers").EnterpriseComplete | null>;
+    getEstablishmentDetails(establishmentNumber: string): Promise<import("../providers").EstablishmentComplete | null>;
     searchEnterprises(params: EnterpriseSearchParams): Promise<import("../providers").KBOApiResponse<import("../providers").Enterprise[]>>;
     searchEstablishments(params: EstablishmentSearchParams): Promise<import("../providers").KBOApiResponse<import("../providers").Establishment[]>>;
     switchProvider(config: KBOProviderFactoryConfig): void;

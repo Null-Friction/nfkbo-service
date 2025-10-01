@@ -38,7 +38,7 @@ let KboProviderHealthIndicator = class KboProviderHealthIndicator extends termin
             const hasValidConfig = this.validateKboConfiguration();
             return hasValidConfig;
         }
-        catch (error) {
+        catch {
             return false;
         }
     }
@@ -51,7 +51,6 @@ let KboProviderHealthIndicator = class KboProviderHealthIndicator extends termin
         if (timeout <= 0 || timeout > 60000) {
             return false;
         }
-        const apiKey = this.configService.kboApiKey;
         return true;
     }
     isValidUrl(urlString) {

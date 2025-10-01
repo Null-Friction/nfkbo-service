@@ -1,7 +1,7 @@
 import { ApiKeyRole } from './api-key.entity';
 export declare class ApiKeyEntity {
     id: string;
-    hashPrefix: string;
+    lookupKey: string;
     hashedKey: string;
     name: string;
     role: ApiKeyRole;

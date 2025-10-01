@@ -89,7 +89,7 @@ let LoggingInterceptor = LoggingInterceptor_1 = class LoggingInterceptor {
             });
         }
     }
-    logError(request, response, error, duration, correlationId) {
+    logError(request, _response, error, duration, correlationId) {
         const { method, url } = request;
         const statusCode = error.status || error.statusCode || 500;
         this.logger.error(`${method} ${url} - ERROR ${statusCode} in ${duration}ms: ${error.message}`, {

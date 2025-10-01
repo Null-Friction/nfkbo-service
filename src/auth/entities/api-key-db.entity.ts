@@ -9,14 +9,13 @@ import {
 import { ApiKeyRole } from './api-key.entity';
 
 @Entity('api_keys')
-@Index(['hashPrefix']) // Index for faster lookup
 export class ApiKeyEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column({ unique: true, length: 16 })
   @Index() // Index for fast lookup
-  hashPrefix!: string; // First 16 chars of hash for O(1) lookup
+  lookupKey!: string; // HMAC-based deterministic lookup key
 
   @Column({ type: 'text' })
   hashedKey!: string;

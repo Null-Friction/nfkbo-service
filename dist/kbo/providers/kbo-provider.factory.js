@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createKBOProvider = createKBOProvider;
 const common_1 = require("@nestjs/common");
-const factory_1 = require("../../common/providers/factory");
 const config_validator_1 = require("../../common/providers/config-validator");
+const factory_1 = require("../../common/providers/factory");
 async function createKBOProvider(configService) {
     const logger = new common_1.Logger('KBOProviderFactory');
     try {

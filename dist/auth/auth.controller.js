@@ -14,11 +14,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
-const api_key_service_1 = require("./services/api-key.service");
-const create_api_key_dto_1 = require("./dto/create-api-key.dto");
-const api_key_guard_1 = require("./guards/api-key.guard");
 const roles_decorator_1 = require("./decorators/roles.decorator");
+const create_api_key_dto_1 = require("./dto/create-api-key.dto");
 const api_key_entity_1 = require("./entities/api-key.entity");
+const api_key_guard_1 = require("./guards/api-key.guard");
+const api_key_service_1 = require("./services/api-key.service");
 let AuthController = class AuthController {
     constructor(apiKeyService) {
         this.apiKeyService = apiKeyService;

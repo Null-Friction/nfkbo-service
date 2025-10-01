@@ -14,8 +14,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KboController = void 0;
 const common_1 = require("@nestjs/common");
-const kbo_service_1 = require("./kbo.service");
 const dto_1 = require("./dto");
+const kbo_service_1 = require("./kbo.service");
 let KboController = class KboController {
     constructor(kboService) {
         this.kboService = kboService;

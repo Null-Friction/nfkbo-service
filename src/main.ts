@@ -1,5 +1,7 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import type { Request, Response, NextFunction } from 'express';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter, KboExceptionFilter } from './common/filters';
 import {
@@ -13,13 +15,24 @@ import { AppConfigService } from './config/config.service';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS
-  app.enableCors();
+  // Trust proxy for proper IP detection (fixes IP spoofing)
+  const expressApp = app.getHttpAdapter().getInstance();
+  expressApp.set('trust proxy', 1);
+
+  // Security headers
+  app.use(helmet());
+
+  // Enable CORS with explicit origin allowlist
+  const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS?.split(',') || [];
+  app.enableCors({
+    origin: allowedOrigins.length > 0 ? allowedOrigins : false,
+    credentials: true,
+  });
 
   // Global prefix for all routes
   app.setGlobalPrefix('api');
 
-  // Global validation pipe
+  // Global validation pipe with request size limits
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true, // Automatically transform payloads to DTO instances
@@ -35,6 +48,17 @@ async function bootstrap() {
       },
     })
   );
+
+  // Set body size limits
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    const contentLength = parseInt(req.headers['content-length'] || '0', 10);
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (contentLength > maxSize) {
+      res.status(413).json({ error: 'Payload too large' });
+      return;
+    }
+    next();
+  });
 
   // Global interceptors (order matters - early interceptors run first)
   app.useGlobalInterceptors(
